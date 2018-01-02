@@ -2,7 +2,7 @@
 namespace Fitapp\classes;
 class Exercises extends Table {
 
-  function _construct() {
+  function __construct() {
     $this->table_name = 'exercises';
     $this->table_prefix = '';
     $this->pkey = 'id';
@@ -28,7 +28,7 @@ class Exercises extends Table {
     ];
     $this->no_insert = ['id', 'created'];
     $this->no_save = ['created'];
-    parent::_construct();
+    parent::__construct();
 
   }
 

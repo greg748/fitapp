@@ -542,6 +542,10 @@ class Table {
     
     }
 
+    public static function getStatic() {
+        return new static();
+    }
+
     /**
      * Is Created
      * Returns true if record was created

@@ -2,7 +2,7 @@
 namespace Fitapp\classes;
 class Logins extends Table {
 
-  function _construct() {
+  function __construct() {
     $this->table_name = 'logins';
     $this->table_prefix = '';
     $this->pkey = 'id';
@@ -16,7 +16,7 @@ class Logins extends Table {
 
     $this->no_insert = ['id','login_time','logout_time'];
     $this->no_save = ['created','login_time'];
-    parent::_construct();
+    parent::__construct();
 
   }
 

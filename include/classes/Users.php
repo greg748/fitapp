@@ -2,7 +2,7 @@
 namespace Fitapp\classes;
 class Users extends Table {
 
-  function _construct() {
+  function __construct() {
     $this->table_name = 'users';
     $this->table_prefix = '';
     $this->pkey = 'id';
@@ -21,7 +21,7 @@ class Users extends Table {
 
     $this->no_insert = ['id','created','last_login'];
     $this->no_save = ['created','last_login'];
-    parent::_construct();
+    parent::__construct();
 
   }
 

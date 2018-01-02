@@ -2,7 +2,7 @@
 namespace Fitapp\classes;
 class Muscles extends Table {
 
-  function _construct() {
+  function __construct() {
     $this->table_name = 'muscles';
     $this->table_prefix = '';
     $this->pkey = 'id';
@@ -14,7 +14,7 @@ class Muscles extends Table {
     ];
     $this->no_insert = ['id'];
     $this->no_save = [];
-    parent::_construct();
+    parent::__construct();
 
   }
 
@@ -23,12 +23,14 @@ class Muscles extends Table {
    * @param Integer $workout_type
    * @return mixed Array of muscles
    */
-  public function getMuscles($workout_type = NULL) {
+  public static function getMuscles($workout_type = NULL) {
+    $Muscle = static::getNewSelf();
     $filter = ($workout_type) ? "AND workout_type=$workout_type" : '';
     $sql = "SELECT * from
-      {$this->table_prefix}{$this->table_name}
+      {$Muscle->table_prefix}{$Muscle->table_name}
       WHERE true {$filter}";
-    $results = $this->db->CacheExecute($sql);
+      echo $sql;
+    $results = $Muscle->db->CacheExecute($sql);
     $muscles = [];
     foreach ($results as $r) {
       $muscles[$r['id']]=$r;
