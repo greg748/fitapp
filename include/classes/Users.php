@@ -15,6 +15,7 @@ class Users extends Table {
       'password' => '',
       'created' => NULL,
       'last_login' => NULL,
+      'timezone' => '',
       'status' => 'a',
     ];
 

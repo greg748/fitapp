@@ -1,6 +1,6 @@
 <?php
 
-namespace FitApp;
+namespace Fitapp;
 
 class Autoloader {
 
@@ -195,16 +195,17 @@ $BASE_DIR = __DIR__;
 $SLASH = DIRECTORY_SEPARATOR;
 //$INCLUDE_DIR = $BASE_DIR . $SLASH . 'include' . $SLASH;
 $INCLUDE_DIR = $BASE_DIR . $SLASH . 'include' . $SLASH;
-$loader->addNamespace('FitApp', $INCLUDE_DIR);
-$loader->addNamespace('FitApp', $INCLUDE_DIR);
-$loader->addNamespace('FitApp\api', $INCLUDE_DIR . $SLASH . 'api');
-$loader->addNamespace('FitApp\exceptions', $INCLUDE_DIR . $SLASH . 'exceptions');
-$loader->addNamespace('FitApp\file', $INCLUDE_DIR . $SLASH . 'file');
-$loader->addNamespace('FitApp\tests', $BASE_DIR . $SLASH . 'tests');
-$loader->addNamespace('FitApp\tools', $INCLUDE_DIR . $SLASH . 'tools');
-$loader->addNamespace('FitApp\traits', $INCLUDE_DIR . $SLASH . 'traits');
+$loader->addNamespace('Fitapp', $INCLUDE_DIR);
+$loader->addNamespace('Fitapp', $INCLUDE_DIR);
+$loader->addNamespace('Fitapp\api', $INCLUDE_DIR . $SLASH . 'api');
+$loader->addNamespace('Fitapp\classes', $INCLUDE_DIR . $SLASH . 'classes');
+$loader->addNamespace('Fitapp\exceptions', $INCLUDE_DIR . $SLASH . 'exceptions');
+$loader->addNamespace('Fitapp\file', $INCLUDE_DIR . $SLASH . 'file');
+$loader->addNamespace('Fitapp\tests', $BASE_DIR . $SLASH . 'tests');
+$loader->addNamespace('Fitapp\tools', $INCLUDE_DIR . $SLASH . 'tools');
+$loader->addNamespace('Fitapp\traits', $INCLUDE_DIR . $SLASH . 'traits');
 
-require_once $INCLUDE_DIR . $SLASH . "tools" . $SLASH . "Functions.php";
+require_once $INCLUDE_DIR  . "tools" . $SLASH . "Functions.php";
 // Logging Requires these values Moved here to support Testing purposes
 define('ALERT', 1);
 define('CRITICAL', 2);
