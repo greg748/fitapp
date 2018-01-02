@@ -1,6 +1,8 @@
 <?php
 namespace FitApp\classes;
 
+/* @todo need support for array type */
+
 use ADOConnection;
 use ADORecordSet;
 use FitApp\exceptions\Exception;
