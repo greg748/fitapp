@@ -7,10 +7,10 @@ class Muscles extends Table {
     $this->table_prefix = '';
     $this->pkey = 'id';
     $this->fields = [
-      'id' : 0,
-      'name' : '',
-      'region' : '',
-      'workout_type' : 0
+      'id' => 0,
+      'name' => '',
+      'region' => '',
+      'workout_type' => 0
     ];
     $this->no_insert = ['id'];
     $this->no_save = [];
@@ -24,7 +24,7 @@ class Muscles extends Table {
    * @return mixed Array of muscles
    */
   public function getMuscles($workout_type = NULL) {
-    $filter = ($workout_type) ? 'AND workout_type=$workout_type' : '';
+    $filter = ($workout_type) ? "AND workout_type=$workout_type" : '';
     $sql = "SELECT * from
       {$this->table_prefix}{$this->table_name}
       WHERE true {$filter}";

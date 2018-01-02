@@ -7,24 +7,24 @@ class Exercises extends Table {
     $this->table_prefix = '';
     $this->pkey = 'id';
     $this->fields = [
-      'id' : 0,
-      'name' : '',
-      'nicknames' : '',
-      'primary_musc' : 0,
-      'secondary_muscs' : [],
-      'description' : '',
-      'ability_level' : 1,
-      'equipment' : '',
-      'user_position' : '',
-      'workout_type' : [],
-      'grip' : '',
-      'weight_type' : '', // @todo is this integer ref to weight_types?
-      'image' : '',
-      'video' : '',
-      'status' : 'a',
-      'created_by' : 0,
-      'notes' : '',
-      'created' : NULL // @todo add lastmodified?
+      'id' => 0,
+      'name' => '',
+      'nicknames' => '',
+      'primary_musc' => 0,
+      'secondary_muscs' => [],
+      'description' => '',
+      'ability_level' => 1,
+      'equipment' => '',
+      'user_position' => '',
+      'workout_type' => [],
+      'grip' => '',
+      'weight_type' => [], 
+      'image' => '',
+      'video' => '',
+      'status' => 'a',
+      'created_by' => 0,
+      'notes' => '',
+      'created' => NULL // @todo add lastmodified?
     ];
     $this->no_insert = ['id', 'created'];
     $this->no_save = ['created'];

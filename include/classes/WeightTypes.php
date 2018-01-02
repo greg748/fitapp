@@ -1,9 +1,9 @@
 <?php
 namespace Fitapp\classes;
-class Equipment extends Table {
+class WeightTypes extends Table {
 
   function _construct() {
-    $this->table_name = 'equipment';
+    $this->table_name = 'weight_types';
     $this->table_prefix = '';
     $this->pkey = 'id';
     $this->fields = [
@@ -19,18 +19,19 @@ class Equipment extends Table {
   }
 
   /**
-   * Gets Equipment from DB all if none specified
-   * @return mixed Array of Equipment
+   * Gets Equipment from DB, based on workout type, or all if none specified
+   * @return mixed Array of weight types
    */
-  public function getEquipment() {
+  public function getWeightTypes() {
     $sql = "SELECT * from
-      {$this->table_prefix}{$this->table_name}";
+      {$this->table_prefix}{$this->table_name}
+      ";
     $results = $this->db->CacheExecute($sql);
-    $equipment = [];
+    $weight_types = [];
     foreach ($results as $r) {
-      $equipment[$r['id']]=$r;
+      $weight_types[$r['id']]=$r;
     } 
-    return $equipment;
+    return $weight_types;
   }
 
 }
