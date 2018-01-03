@@ -2,6 +2,10 @@
 namespace Fitapp\classes;
 class Exercises extends Table {
 
+  public static $userPositions = ['standing','bench','kneeling','half-kneeling','seated','incline bench',
+      'decline bench','roman chair','back extension','prone','plank','high plank'];
+      public static $gripTypes = ['neutral','palm-in','palm-up','thumb-up','thumb-down', 'thumb-up-and-in','reverse','wide','narrow','hammer','foot','med-ball','multi'];
+
   function __construct() {
     $this->table_name = 'exercises';
     $this->table_prefix = '';
@@ -14,8 +18,8 @@ class Exercises extends Table {
       'secondary_muscs' => [],
       'description' => '',
       'ability_level' => 1,
-      'equipment' => '',
-      'user_position' => '',
+      'equipment' => [],
+      'user_position' => '', // $userPositions
       'workout_type' => [],
       'grip' => '',
       'weight_type' => [], 
