@@ -2,6 +2,8 @@
 namespace Fitapp\classes;
 class Equipment extends Table {
 
+  use trait Fitapp\traits\NicknamableTrait;
+
   function __construct() {
     $this->table_name = 'equipment';
     $this->table_prefix = '';
@@ -9,11 +11,12 @@ class Equipment extends Table {
     $this->fields = [
       'id' => 0,
       'name' => '',
-      'nicknames' => '',
-      'status' => 'a'
+      'nicknames' => [],
+      'status' => 'a',
+      'created' => null,
     ];
-    $this->no_insert = ['id'];
-    $this->no_save = [];
+    $this->no_insert = ['id', 'created'];
+    $this->no_save = ['created'];
     parent::__construct();
 
   }

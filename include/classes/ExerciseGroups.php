@@ -2,6 +2,9 @@
 namespace Fitapp\classes;
 class ExerciseGroups extends Table {
 
+  // this is an enum type
+  public static $ex_group_types = ['warmup', 'main', 'warmdown','cardio','active_recovery'];
+
   function _construct() {
     $this->table_name = 'ex_groups';
     $this->table_prefix = '';
