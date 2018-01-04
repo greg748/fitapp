@@ -33,4 +33,14 @@ class Equipment extends Table {
     return $equipment;
   }
 
+  public static function getEquipmentMenu() {
+    $Equipment = static::getNewSelf();
+    $equipList = $Equipment->getEquipment();
+    $menu = [];
+    foreach ($equipList as $e) {
+      $menu[$e['id']] = $e['name'];
+    }
+    return $menu;
+  }
+
 }

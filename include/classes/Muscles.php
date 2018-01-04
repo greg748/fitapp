@@ -38,4 +38,13 @@ class Muscles extends Table {
     return $muscles;
   }
 
+  public static function getMusclesForMenu($workout_type = NULL) {
+    $muscles = static::getMuscles($workout_type);
+    $menu = [];
+    foreach ($muscles as $m) {
+      $menu[$m['id']]=$m['name'];
+    }
+    return $menu;
+  }
+
 }

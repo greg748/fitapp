@@ -15,4 +15,15 @@ class WorkoutTypes extends Table {
     parent::__construct();
 
   }
+
+  public static function getWorkoutTypes() {
+    $WorkoutTypes = static::getNewSelf();
+    $sql = "SELECT id, name FROM workout_types";
+    $results = $WorkoutTypes->db->CacheExecute(7200, $sql);
+    $wt = [];
+    foreach ($results as $r) {
+      $wt[$r['id']] = $r['name'];
+    }
+    return $wt;
+  }
 }

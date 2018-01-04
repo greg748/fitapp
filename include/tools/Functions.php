@@ -7,13 +7,13 @@ function menu($array, $fieldName = 'select', $default = '', $allowBlank = FALSE)
   if ($allowBlank) {
     $menu .= "\n<option value=''>Please select one</option>";
   }
-  foreach ($array as $option) {
-    if (is_array($option)) {
-      list($key,$value) = $option;
-    } else {
-      $key = $option;
-      $value = $option;
-    }
+  foreach ($array as $key=>$value) {
+    // if (is_array($option)) { // maybe for opt groups?
+    //   list($key,$value) = $option;
+    // } else {
+    //   $key = $option;
+    //   $value = $option;
+    // }
     $selected = ($key == $default) ? ' selected ' : '';
     $menu .= "\n<option value=\"$key\"{$selected}>$value</option>";
   }
@@ -46,7 +46,7 @@ function checkbox($array, $fieldName = 'select', $default = []) {
       $value = $option;
     }
     $selected = (in_array($key, $default)) ? ' checked="checked" ' : '';
-    $checkbox .= "<span class=\"checkbox\"><input type=\"checkbox\" value=\"$key\"{$selected}/>$value</span>\n";
+    $checkbox .= "<div class=\"checkbox\"><input type=\"checkbox\" value=\"$key\"{$selected}/>$value</div>\n";
   }
   return trim($checkbox);
 } 
