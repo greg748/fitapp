@@ -50,7 +50,7 @@ $abiltitiesMenu = menu(Exercises::$abilities,'ability_level',$e['ability'],FALSE
 $userPositionsMenu = menu(Exercises::$userPositions,'user_position',$e['user_position'], FALSE);
 
 $muscles = Muscles::getMusclesForMenu();
-$primaryMuscles = menu($muscles,'primary_musc', $e['primary_musc'], TRUE);
+$primaryMuscles = radio($muscles,'primary_musc', $e['primary_musc'], TRUE);
 $secondaryMuscles = checkbox($muscles,'secondary_musc[]',$e['secondary_musc']);
 
 $equipment = Equipment::getEquipmentMenu();
@@ -64,7 +64,7 @@ table.display { border: 1px solid #999;}
 table.display th { text-align: left: vertical-align: top; 
     font-weight: bold; font-size: 12px; background-color: #ccc}
 table.display td { text-align: left; vertical-align: top;}
-span.checkbox, span.radio { white-space: nowrap; }
+span.checkbox, span.radio { white-space: nowrap; display: inline-block }
 </style>
 
 <form method="post" action="edit.php">

@@ -41,13 +41,11 @@ class WeightTypes extends Table {
     $WeightTypes = static::getNewSelf();
     $sql = "SELECT id, name FROM weight_types 
     WHERE status='a'";
-    echo "$sql";
     $results = $WeightTypes->db->CacheExecute(7200, $sql);
     $wt = [];
     foreach ($results as $r) {
       $wt[$r['id']] = $r['name'];
     }
-    print_r($wt);
     return $wt;
   }
 
