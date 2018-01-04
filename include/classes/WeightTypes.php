@@ -2,6 +2,8 @@
 namespace Fitapp\classes;
 class WeightTypes extends Table {
 
+  use trait Fitapp\traits\NicknamableTrait;
+
   function __construct() {
     $this->table_name = 'weight_types';
     $this->table_prefix = '';
@@ -9,11 +11,12 @@ class WeightTypes extends Table {
     $this->fields = [
       'id' => 0,
       'name' => '',
-      'nicknames' => '',
-      'status' => 'a'
+      'nicknames' => [],
+      'status' => 'a',
+      'created' => null,
     ];
-    $this->no_insert = ['id'];
-    $this->no_save = [];
+    $this->no_insert = ['id', 'created'];
+    $this->no_save = ['created'];
     parent::__construct();
 
   }

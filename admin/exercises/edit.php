@@ -1,12 +1,49 @@
 <?php
 include_once '../../init.php';
-use Fitapp\classes\Exercises;
 use Fitapp\classes\Equipment;
+use Fitapp\classes\Exercises;
 use Fitapp\classes\Muscles;
 use Fitapp\classes\WorkoutTypes;
 use Fitapp\classes\WeightTypes;
 
-$e = [];
+$id = $_REQUEST['id'];
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  if (isset($_POST['add_equipment'])) {
+    $add_id = Equipment::addIfUnique($_POST['add_equipment']);
+    $_POST['equipment'] = array_unique($_POST['equipment']+$add_id);
+  }
+  if (isset($_POST['add_weight_type'])) {
+    $add_id = Equipment::addIfUnique($_POST['add_weight_type']);
+    $_POST['weight_type'] = array_unique($_POST['weight_type']+$add_id);
+  }
+
+  if ($id) {
+    $Exercise = Exercises::get($id);
+    $Exercise->setFields($_POST);
+    $Exercise->save(TRUE);
+    // error check
+    if (!$Exercise->isSaved()) {
+      echo "<pre>".$Exercise->lastSql()."<pre><br>";
+      echo $Exercise->errorMsg();
+      die;
+    }
+  } else {
+    $Exercise = Exercise::create($_POST, TRUE);
+    if (!$Exercise) {
+      echo "<pre>Error! ".$db->lastSql(). "\n". $db->errorMsg(). "</pre>";
+      die;
+    }
+    $id = $Exercise->getField('id');
+  }
+
+} else {
+  if (isset($id)) {
+    $e = Exercises::get($id);
+  } else {
+    $e = [];
+  }
+}
 
 $gripsMenu = menu(Exercises::$gripTypes,'grip',$e['grip'],FALSE);
 $abiltitiesMenu = menu(Exercises::$abilities,'ability_level',$e['ability'],FALSE);
@@ -30,6 +67,8 @@ table.display td { text-align: left; vertical-align: top;}
 span.checkbox, span.radio { white-space: nowrap; }
 </style>
 
+<form method="post" action="edit.php">
+<input type="hidden" name="id" value="<?=$e['id']?>"/>
 <table class="display">
 <tr>
     <th>Name</th>
