@@ -13,8 +13,7 @@ trait NicknamableTrait {
     $Static = static::getNewSelf();
     $qname = $Static->db->qstr($name);
     $sql = "SELECT id FROM {$Static->table_prefix}{$Static->table_name}
-    WHERE name=$qname OR $qname = any(nickname)";
-    echo $sql;
+    WHERE name=$qname OR $qname = any(nicknames)";
     $id = $Static->db->GetOne($sql);
     if (!$id) {
       $NewItem = self::create(['name'=>$name]);

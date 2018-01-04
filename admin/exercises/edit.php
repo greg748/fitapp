@@ -11,13 +11,15 @@ $id = $_REQUEST['id'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   if (isset($_POST['add_equipment'])) {
     $add_id = Equipment::addIfUnique($_POST['add_equipment']);
-    $_POST['equipment'] = array_unique($_POST['equipment']+$add_id);
+    $_POST['equipment'] = array_unique(array_push($_POST['equipment'],$add_id));
   }
+  echo "foo";
   if (isset($_POST['add_weight_type'])) {
     $add_id = WeightTypes::addIfUnique($_POST['add_weight_type']);
-    $_POST['weight_type'] = array_unique($_POST['weight_type']+$add_id);
+    $_POST['weight_type'] = array_unique(array_push($_POST['weight_type'],$add_id));
   }
-
+  echo "bar";
+print_r($_POST);
   if ($id) {
     $Exercise = Exercises::get($id);
     $Exercise->setFields($_POST);

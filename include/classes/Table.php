@@ -86,6 +86,16 @@ class Table {
         return $obj;
     
     }
+ 
+    /**
+     * Used by the array map for array items
+     *
+     * @param mixed $val
+     * @return void
+     */
+    protected function dbQuote($val) {
+        return $this->db->qstr($val);
+    }
 
     /**
      * Inserts a new task record into the database with the current internal data.
@@ -110,10 +120,14 @@ class Table {
             if (is_null($value)) {
                 $queryValues[] = "NULL";
             } else {
-                if (!is_numeric($value) && strlen($value) > 0) {
+                if (!is_array($value) && !is_numeric($value) && strlen($value) > 0) {
                     $value = trim($value);
                 }
-                $queryValues[] = "{$this->db->qstr($value)}";
+                if (is_array($value)) {
+                    $queryValues[] = "'{".implode(',',array_map("dbQuote",$value))."}'";
+                } else {
+                    $queryValues[] = "{$this->db->qstr($value)}";
+                }
             }
         }
         
