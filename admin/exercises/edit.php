@@ -9,7 +9,7 @@ use Fitapp\classes\WeightTypes;
 $e = [];
 
 $gripsMenu = menu(Exercises::$gripTypes,'grip',$e['grip'],FALSE);
-$abiltitesMenu = menu(Exercises::$abilities,'ability_level',$e['ability'],FALSE);
+$abiltitiesMenu = menu(Exercises::$abilities,'ability_level',$e['ability'],FALSE);
 $userPositionsMenu = menu(Exercises::$userPositions,'user_position',$e['user_position'], FALSE);
 
 $muscles = Muscles::getMusclesForMenu();
@@ -33,31 +33,35 @@ span.checkbox, span.radio { white-space: nowrap; }
 <table class="display">
 <tr>
     <th>Name</th>
+    <th>Workout Type</th>
+    <th>Ability Level</th>
     <th>Primary Muscle</th>
     <th>Secondary Muscles</th>
-    <th>Description</th>
-    <th>Ability Level</th>
-    <th>Equipment</th>
-    <th>User Position</th>
-    <th>Workout Type</th>
-    <th>Grip</th>
-    <th>Weight Type</th>
     <th>Notes</th>  
 </tr>
 <tr>
     <td><input type="text" name="name" value="<?=$e['name'];?>"></td>
+    <td><?= $workoutTypesMenu; ?></td>
+    <td><?=$abiltitiesMenu; ?></td>
     <td><?=$primaryMuscles;?></td>
     <td><?=$secondaryMuscles;?></td>
+    <td><textarea name="notes" id="notes" rows="3" cols="25"><?=$e['notes'];?></textarea></td>
+</tr>
+<tr>
+    <th>Description</th>
+    <th>Equipment</th>
+    <th>User Position</th>
+    <th>Grip</th>
+    <th>Weight Type</th>
+</tr>
+<tr>
     <td><input type="text" name="description" value="<?=$e['description'];?>"></td>
-    <td>Ab</td>
     <td><?= $equipmentMenu; ?><br>
         <input type="text" name="add_equipment" value = ''/></td>
     <td><?= $userPositionsMenu; ?></td>
-    <td><?= $workoutTypesMenu; ?></td>
     <td><?= $gripsMenu; ?></td>
     <td><?= $weightTypesMenu; ?>
         <input type="text" name="add_weight_type" value = ''/></td>
     </td>
-    <td><textarea name="notes" id="notes" rows="3" cols="25"><?=$e['notes'];?></textarea></td>
 </tr>
 </table>
