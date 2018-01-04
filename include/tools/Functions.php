@@ -46,7 +46,7 @@ function checkbox($array, $fieldName = 'select', $default = []) {
       $value = $option;
     }
     $selected = (in_array($key, $default)) ? ' checked="checked" ' : '';
-    $checkbox .= "<div class=\"checkbox\"><input type=\"checkbox\" value=\"$key\"{$selected}/>$value</div>\n";
+    $checkbox .= "<span class=\"checkbox\"><input type=\"checkbox\" value=\"$key\"{$selected}/>$value</span>\n";
   }
   return trim($checkbox);
 } 

@@ -29,7 +29,6 @@ class Muscles extends Table {
     $sql = "SELECT * from
       {$Muscle->table_prefix}{$Muscle->table_name}
       WHERE true {$filter}";
-      echo $sql;
     $results = $Muscle->db->CacheExecute($sql);
     $muscles = [];
     foreach ($results as $r) {
