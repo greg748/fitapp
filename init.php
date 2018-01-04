@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(E_ALL ^ E_WARNING ^ E_NOTICE);
 include_once 'autoload.php';
 include_once 'vendor/autoload.php';
 

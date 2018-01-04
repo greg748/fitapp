@@ -158,7 +158,7 @@ class Autoloader {
                 // yes, we're done
                 return $file;
             } else {
-                GelfLogger::publish('Class File Not Found', INFO, 'Autoload', ['filename' => $file, 'prefix' => $prefix, 'rel_class' => $relative_class]);
+                error_log("Class file $file not found");
             }
         }
 

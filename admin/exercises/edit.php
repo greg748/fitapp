@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_POST['equipment'] = array_unique($_POST['equipment']+$add_id);
   }
   if (isset($_POST['add_weight_type'])) {
-    $add_id = Equipment::addIfUnique($_POST['add_weight_type']);
+    $add_id = WeightTypes::addIfUnique($_POST['add_weight_type']);
     $_POST['weight_type'] = array_unique($_POST['weight_type']+$add_id);
   }
 

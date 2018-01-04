@@ -1,8 +1,9 @@
 <?php
 namespace Fitapp\classes;
-class Equipment extends Table {
+use Fitapp\traits\NicknamableTrait;
 
-  use trait Fitapp\traits\NicknamableTrait;
+class Equipment extends Table {
+  use NicknamableTrait;
 
   function __construct() {
     $this->table_name = 'equipment';

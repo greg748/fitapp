@@ -16,7 +16,7 @@ class Table {
      */
     protected $db;
     protected $table_prefix;
-    protected $table;
+    protected $table_name;
     protected $pkey;
     protected $insert_id;
     protected $last_sql;
@@ -24,14 +24,6 @@ class Table {
     protected $is_saved = FALSE;
     protected $usesObjectTable = FALSE;
 
-    /**
-     *
-     * @return boolean
-     */
-    public function isUsesObjectTable() {
-        return $this->usesObjectTable;
-    
-    }
     protected $problem_fields;
     protected $null_fields = [];
     
@@ -128,7 +120,7 @@ class Table {
         //put in a false value just in case this is the first time the db connection has been used.
         $insertId = $this->db->Insert_ID() == '' ? 'none' : $this->db->Insert_ID();
         
-        $sql = "INSERT INTO {$this->table_prefix}{$this->table} (" . implode(', ', $queryNames) . ") VALUES (" . implode(', ', $queryValues) . ")";
+        $sql = "INSERT INTO {$this->table_prefix}{$this->table_name} (" . implode(', ', $queryNames) . ") VALUES (" . implode(', ', $queryValues) . ")";
         if (isset($this->pkey)) {
             $sql .= " RETURNING {$this->pkey}";
         }
@@ -143,9 +135,7 @@ class Table {
             if ($show_sql) {
                 echo "\n{$this->error_msg}";
             }
-            GelfLogger::publish("SQL ERROR", WARNING, 'Table', ['sql'=>$sql, 
-                'error'=>$this->error_msg, 
-                'called-class'=>get_called_class()]);
+            error_log("SQL erorr {$this->error_msg}\n$sql");
         }
         
         //check that the insert id has changed to show that the insert was successful
@@ -332,9 +322,7 @@ class Table {
             return $obj;
         } else {
             $class = get_called_class();
-            GelfLogger::publish('Failed to Create Object ' . $class, CRITICAL, 'Table', ['field'=>'id', 
-                'value'=>$id, 
-                'class'=>$class], TRUE);
+            error_log("Create $class error");
         }
         
         return false;
@@ -352,7 +340,7 @@ class Table {
      * @return boolean
      */
     protected function load($id) {
-        $sql = "SELECT * FROM {$this->table_prefix}{$this->table} WHERE {$this->pkeyWhereQuery($id)}";
+        $sql = "SELECT * FROM {$this->table_prefix}{$this->table_name} WHERE {$this->pkeyWhereQuery($id)}";
         $object_fields = $this->db->getrow($sql);
         if ($object_fields) {
             $this->setFields($object_fields);
@@ -439,7 +427,7 @@ class Table {
         }
         
         $val = $this->db->qstr($val);
-        $sql = "SELECT * FROM {$this->table_prefix}{$this->table} WHERE $field = $val LIMIT 1";
+        $sql = "SELECT * FROM {$this->table_prefix}{$this->table_name} WHERE $field = $val LIMIT 1";
         if ($show_sql) {
             echo $sql . "\n";
         }
@@ -497,7 +485,7 @@ class Table {
      * @return array|false
      */
     protected function loadAllByField($field, $val, $sort, $limit, $show_sql = FALSE) {
-        $sql = "SELECT * FROM {$this->table_prefix}{$this->table}";
+        $sql = "SELECT * FROM {$this->table_prefix}{$this->table_name}";
         if (trim($field) !== '') {
             if (!array_key_exists($field, $this->fields)) {
                 return FALSE;
@@ -598,7 +586,7 @@ class Table {
             }
         }
         
-        $sql = "UPDATE {$this->table_prefix}{$this->table}
+        $sql = "UPDATE {$this->table_prefix}{$this->table_name}
             SET " . implode(', ', $columns) . "
             WHERE {$this->pkeyWhereQuery($object_fields)}";
         $this->db->execute($sql);
@@ -608,7 +596,7 @@ class Table {
             $object_fields = $this->getFields();
             $this->error_msg = $this->db->ErrorMsg();
             $additional = ['sql'=>$sql, 'error_message'=>$this->error_msg] + (array) $object_fields;
-            GelfLogger::publish('Table Save Error', ERROR, 'Table', $additional);
+            error_log("Table save error $sql \n {$this->error_msg}");
         }
         
         if ($show_sql) {
@@ -636,7 +624,7 @@ class Table {
             $id[$this->pkey] = $this->getField($this->pkey);
         }
         
-        $sql = "SELECT * FROM {$this->table_prefix}{$this->table} WHERE {$this->pkeyWhereQuery($id)}";
+        $sql = "SELECT * FROM {$this->table_prefix}{$this->table_name} WHERE {$this->pkeyWhereQuery($id)}";
         $dbFields = $this->db->getrow($sql);
         
         // for some reason, floats didn't equal, and were infinitessimally different.
@@ -729,7 +717,7 @@ class Table {
      * @return mixed
      */
     public function getTable() {
-        return $this->table_prefix . $this->table;
+        return $this->table_prefix . $this->table_name;
     
     }
 

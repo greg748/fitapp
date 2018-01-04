@@ -1,8 +1,8 @@
 <?php
 namespace Fitapp\classes;
+use Fitapp\traits\NicknamableTrait;
 class WeightTypes extends Table {
-
-  use trait Fitapp\traits\NicknamableTrait;
+  use NicknamableTrait;
 
   function __construct() {
     $this->table_name = 'weight_types';

@@ -10,10 +10,12 @@ trait NicknamableTrait {
    * @return Integer $id id of the item
    */
   public static function addIfUnique($name) {
-    $name = $db->qstr($name);
-    $sql = "SELECT id FROM {$this->table_prefix}{$this->table_name}
-    WHERE name=$name OR $name = any(nickname)";
-    $id = $db->GetOne($sql);
+    $Static = static::getNewSelf();
+    $qname = $Static->db->qstr($name);
+    $sql = "SELECT id FROM {$Static->table_prefix}{$Static->table_name}
+    WHERE name=$qname OR $qname = any(nickname)";
+    echo $sql;
+    $id = $Static->db->GetOne($sql);
     if (!$id) {
       $NewItem = self::create(['name'=>$name]);
       $id = $NewItem->getField('id');
