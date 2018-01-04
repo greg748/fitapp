@@ -65,3 +65,5 @@ span.checkbox, span.radio { white-space: nowrap; display: inline-block }
     </td>
 </tr>
 </table>
+<button>Save</button>
+</form>
