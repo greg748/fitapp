@@ -23,30 +23,25 @@ function menu($array, $fieldName = 'select', $default = '', $allowBlank = FALSE)
 
 function radio($array, $fieldName = 'select', $default = '') {
   $radio = '';
-  foreach ($array as $option) {
-    if (is_array($option)) {
-      list($key,$value) = $option;
-    } else {
-      $key = $option;
-      $value = $option;
-    }
+  foreach ($array as $key=>$value) {
     $selected = ($key == $default) ? ' checked="checked" ' : '';
-    $radio .= "<span class=\"radio\"><input type=\"radio\" value=\"$key\"{$selected}/>$value</span>\n";
+    $radio .= "<span class=\"radio\"><input type=\"radio\" name=\"{$fieldName}\" value=\"$key\"{$selected}/>$value</span>\n";
   }
   return trim($radio);
 } 
 
 function checkbox($array, $fieldName = 'select', $default = []) {
+  print_r($default);
   $checkbox = '';
-  foreach ($array as $option) {
-    if (is_array($option)) {
-      list($key,$value) = $option;
-    } else {
-      $key = $option;
-      $value = $option;
-    }
+  foreach ($array as $key=>$value) {
     $selected = (in_array($key, $default)) ? ' checked="checked" ' : '';
-    $checkbox .= "<span class=\"checkbox\"><input type=\"checkbox\" value=\"$key\"{$selected}/>$value</span>\n";
+    $checkbox .= "<span class=\"checkbox\"><input type=\"checkbox\" name=\"{$fieldName}\" value=\"$key\"{$selected}/>$value</span>\n";
   }
   return trim($checkbox);
 } 
+
+function print_pre($what) {
+  echo "<pre>";
+  print_r($what);
+  echo "</pre>";
+}

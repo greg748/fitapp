@@ -16,6 +16,7 @@ class Equipment extends Table {
       'status' => 'a',
       'created' => null,
     ];
+    $this->array_fields = ['nicknames'];
     $this->no_insert = ['id', 'created'];
     $this->no_save = ['created'];
     parent::__construct();

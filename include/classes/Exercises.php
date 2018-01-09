@@ -31,6 +31,7 @@ class Exercises extends Table {
       'notes' => '',
       'created' => NULL // @todo add lastmodified?
     ];
+    $this->array_fields = ['secondary_muscs','equipment','workout_type','weight_type'];
     $this->no_insert = ['id', 'created'];
     $this->no_save = ['created'];
     parent::__construct();

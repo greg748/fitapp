@@ -8,7 +8,6 @@
 namespace FitApp\classes;
 
 use FitApp\exceptions\Exception;
-use FitApp\tools\InputParser;
 
 /**
  * class AppConfig

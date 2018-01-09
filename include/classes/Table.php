@@ -6,8 +6,6 @@ namespace FitApp\classes;
 use ADOConnection;
 use ADORecordSet;
 use FitApp\exceptions\Exception;
-use FitApp\tools\InputParser;
-use FitApp\tools\ReportTools;
 
 class Table {
     /**
@@ -26,6 +24,7 @@ class Table {
 
     protected $problem_fields;
     protected $null_fields = [];
+    protected $array_fields = [];
     
     //Table Fields
     protected $fields = [];
@@ -93,8 +92,12 @@ class Table {
      * @param mixed $val
      * @return void
      */
-    protected function dbQuote($val) {
-        return $this->db->qstr($val);
+    protected function sqlArrayQuote($val) {
+        if (trim($val) == '' || is_numeric($val)) {
+            return $val;
+        } else {
+            return '"' . addslashes($val). '"';
+        }
     }
 
     /**
@@ -120,13 +123,15 @@ class Table {
             if (is_null($value)) {
                 $queryValues[] = "NULL";
             } else {
-                if (!is_array($value) && !is_numeric($value) && strlen($value) > 0) {
-                    $value = trim($value);
-                }
-                if (is_array($value)) {
-                    $queryValues[] = "'{".implode(',',array_map("dbQuote",$value))."}'";
+                if (in_array($name, $this->array_fields)) {
+                    $queryValues[] = "'{".implode(',',array_map([$this,"sqlArrayQuote"],$value))."}'";
                 } else {
-                    $queryValues[] = "{$this->db->qstr($value)}";
+                    if (!is_numeric($value) && strlen($value) > 0) {
+                        $value = trim($value);
+                    } else {
+                        $queryValues[] = "{$this->db->qstr($value)}";
+                    }
+
                 }
             }
         }
@@ -139,7 +144,7 @@ class Table {
             $sql .= " RETURNING {$this->pkey}";
         }
         if ($show_sql) {
-            InputParser::outputCLI(ReportTools::clean($sql));
+            echo $sql;
         }
         $result = $this->db->execute($sql);
         
@@ -165,7 +170,7 @@ class Table {
         }
         
         if ($show_sql) {
-            echo "\n".ReportTools::wrap(ReportTools::clean($sql));
+            echo "\n".$sql;
         }
         
         return $this->insert_id;
@@ -276,6 +281,9 @@ class Table {
                 //Set Field as null if '' and its default is null
                 if ($value == '' && in_array($name, $this->null_fields)) {
                     $this->fields[$name] = NULL;
+                } elseif (in_array($name, $this->array_fields) && !is_array($value)) {
+                    $value_array = explode(',',trim($value,'{} \t\n\r\0\x0B'));
+                    $this->fields[$name] = ($value_array) ?: [];
                 } else {
                     $this->fields[$name] = $value;
                 }
@@ -590,13 +598,17 @@ class Table {
             }
             
             //Nulls and Booleans can not be quoted in sql
-            if (is_null($value)) {
-                $columns[] = "$name=NULL";
+            if (in_array($name, $this->array_fields)) {
+                $columns[] = "$name = '{".implode(',',array_map([$this,"sqlArrayQuote"],$value))."}'";
             } else {
-                if (!is_numeric($value) && strlen($value) > 0) {
-                    $value = trim($value);
+               if (is_null($value)) {
+                    $columns[] = "$name=NULL";
+                } else {
+                    if (!is_numeric($value) && strlen($value) > 0) {
+                        $value = trim($value);
+                    }
+                    $columns[] = "$name={$this->db->qstr($value)}";
                 }
-                $columns[] = "$name={$this->db->qstr($value)}";
             }
         }
         

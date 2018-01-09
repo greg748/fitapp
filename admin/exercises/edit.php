@@ -9,17 +9,22 @@ use Fitapp\classes\WeightTypes;
 $id = $_REQUEST['id'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  if (isset($_POST['add_equipment'])) {
-    $add_id = Equipment::addIfUnique($_POST['add_equipment']);
-    $_POST['equipment'] = array_unique(array_push($_POST['equipment'],$add_id));
+   print_r($_POST);
+  if (isset($_POST['add_equipment']) && trim($_POST['add_equipment']) !='') {
+    $add_id = Equipment::addIfUnique($_POST['add_equipment'], TRUE);
+    echo "New id = $add_id";
+    array_push($_POST['equipment'], $add_id);
+    $_POST['equipment'] = array_filter($_POST['equipment']);
   }
   echo "foo";
-  if (isset($_POST['add_weight_type'])) {
+  if (isset($_POST['add_weight_type']) && trim($_POST['add_weight_type']) != '') {
     $add_id = WeightTypes::addIfUnique($_POST['add_weight_type']);
-    $_POST['weight_type'] = array_unique(array_push($_POST['weight_type'],$add_id));
+    array_push($_POST['weight_type'], $add_id);
+    $_POST['weight_type'] = array_filter($_POST['weight_type']);
   }
   echo "bar";
-print_r($_POST);
+  print_pre($_POST);
+  
   if ($id) {
     $Exercise = Exercises::get($id);
     $Exercise->setFields($_POST);
@@ -31,7 +36,9 @@ print_r($_POST);
       die;
     }
   } else {
-    $Exercise = Exercise::create($_POST, TRUE);
+    echo "creating";
+    $Exercise = Exercises::create($_POST, TRUE);
+    var_dump($Exercise);
     if (!$Exercise) {
       echo "<pre>Error! ".$db->lastSql(). "\n". $db->errorMsg(). "</pre>";
       die;
@@ -41,22 +48,22 @@ print_r($_POST);
 
 } else {
   if (isset($id)) {
-    $e = Exercises::get($id);
+    $e = Exercises::get($id)->getFields();
+    print_pre($e);
   } else {
     $e = [];
   }
 }
 
 $gripsMenu = menu(Exercises::$gripTypes,'grip',$e['grip'],FALSE);
-$abiltitiesMenu = menu(Exercises::$abilities,'ability_level',$e['ability'],FALSE);
+$abiltitiesMenu = menu(Exercises::$abilities,'ability_level',$e['ability_level'],FALSE);
 $userPositionsMenu = menu(Exercises::$userPositions,'user_position',$e['user_position'], FALSE);
 
 $muscles = Muscles::getMusclesForMenu();
 $primaryMuscles = radio($muscles,'primary_musc', $e['primary_musc'], TRUE);
-$secondaryMuscles = checkbox($muscles,'secondary_musc[]',$e['secondary_musc']);
+$secondaryMuscles = checkbox($muscles,'secondary_muscs[]',$e['secondary_muscs']);
 
-$equipment = Equipment::getEquipmentMenu();
-$equipmentMenu = menu($equipmentMenu, 'equipment[]', $e['equipment'], TRUE);
+$equipmentMenu = checkbox(Equipment::getEquipmentMenu(), 'equipment[]', $e['equipment'], TRUE);
 
 $workoutTypesMenu = checkbox(WorkoutTypes::getWorkoutTypes(), 'workout_type[]', $e['workout_type']);
 $weightTypesMenu = checkbox(WeightTypes::getWeightTypesMenu(), 'weight_type[]', $e['weight_type']);
