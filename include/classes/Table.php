@@ -128,10 +128,8 @@ class Table {
                 } else {
                     if (!is_numeric($value) && strlen($value) > 0) {
                         $value = trim($value);
-                    } else {
-                        $queryValues[] = "{$this->db->qstr($value)}";
                     }
-
+                    $queryValues[] = "{$this->db->qstr($value)}";
                 }
             }
         }
@@ -282,7 +280,7 @@ class Table {
                 if ($value == '' && in_array($name, $this->null_fields)) {
                     $this->fields[$name] = NULL;
                 } elseif (in_array($name, $this->array_fields) && !is_array($value)) {
-                    $value_array = explode(',',trim($value,'{} \t\n\r\0\x0B'));
+                    $value_array = $this->sqlArrayQuote($value);
                     $this->fields[$name] = ($value_array) ?: [];
                 } else {
                     $this->fields[$name] = $value;
@@ -292,6 +290,20 @@ class Table {
         
         return $this->is_saved;
     
+    }
+
+    /**
+     * Returns a php type array from a SQL {1,2,3} array
+     *
+     * @param [type] $value
+     * @return void
+     */
+    protected function sqlArrayToPHP($value) {
+        return explode(',',trim($value,'{} \t\n\r\0\x0B'));
+    }
+
+    protected function phpArrayToSql($value) {
+        return "'{".implode(',',array_map([$this,"sqlArrayQuote"],$value))."}'";
     }
 
     /**
@@ -599,7 +611,7 @@ class Table {
             
             //Nulls and Booleans can not be quoted in sql
             if (in_array($name, $this->array_fields)) {
-                $columns[] = "$name = '{".implode(',',array_map([$this,"sqlArrayQuote"],$value))."}'";
+                $columns[] = "$name = ".$this->phpArrayToSql($value);
             } else {
                if (is_null($value)) {
                     $columns[] = "$name=NULL";
@@ -666,6 +678,12 @@ class Table {
             } elseif (is_float($value)) {
                 if (number_format($dbFields[$field], 2) != number_format($value, 2)) {
                     $diff[] = ['field'=>$field, 'value'=>$value, 'db_value'=>$dbFields[$field], 'type'=>'float'];
+                }
+            } elseif (in_array($field, $this->array_fields)) {
+                if ($value != $this->sqlArrayToPHP($dbFields[$field])) {
+                    print_r($dbFields[$field]);
+                    echo "\n<br>$value";
+                    $diff[] = ['field'=>$field, 'value'=>$value, 'db_value'=>$dbFields[$field], 'type'=>'array'];
                 }
             } else {
                 if (trim($dbFields[$field]) != trim($value)) {

@@ -2,7 +2,7 @@
 
 // general functions go here
 
-function menu($array, $fieldName = 'select', $default = '', $allowBlank = FALSE) {
+function menu($array, $fieldName = 'select', $default = '', $allowBlank = FALSE, $required = TRUE, $use_keys = TRUE) {
   $menu = "<select name=\"{$fieldName}\" id=\"{$fieldname}\">";
   if ($allowBlank) {
     $menu .= "\n<option value=''>Please select one</option>";
@@ -15,9 +15,12 @@ function menu($array, $fieldName = 'select', $default = '', $allowBlank = FALSE)
     //   $value = $option;
     // }
     $selected = ($key == $default) ? ' selected ' : '';
+    if (!$use_keys) {
+      $key = $value;
+    }
     $menu .= "\n<option value=\"$key\"{$selected}>$value</option>";
   }
-  $menu .= "\b</select>";
+  $menu .= "\n</select>";
   return $menu;
 }
 
@@ -34,6 +37,9 @@ function checkbox($array, $fieldName = 'select', $default = []) {
   print_r($default);
   $checkbox = '';
   foreach ($array as $key=>$value) {
+    if ($value == '') {
+      continue;
+    }
     $selected = (in_array($key, $default)) ? ' checked="checked" ' : '';
     $checkbox .= "<span class=\"checkbox\"><input type=\"checkbox\" name=\"{$fieldName}\" value=\"$key\"{$selected}/>$value</span>\n";
   }
