@@ -124,7 +124,7 @@ class Table {
                 $queryValues[] = "NULL";
             } else {
                 if (in_array($name, $this->array_fields)) {
-                    $queryValues[] = "'{".implode(',',array_map([$this,"sqlArrayQuote"],$value))."}'";
+                    $queryValues[] = "'{".implode(',',array_map([$this,"sqlArrayQuote"],array_filter($value)))."}'";
                 } else {
                     if (!is_numeric($value) && strlen($value) > 0) {
                         $value = trim($value);
@@ -210,7 +210,7 @@ class Table {
             if (is_numeric($name)) {
                 continue;
             }
-            if (!is_numeric($value) && is_string($value) && strlen($value) > 0) {
+            if (!in_array($name, $this->array_fields) && !is_numeric($value) && is_string($value) && strlen($value) > 0) {
                 $value = trim($value);
             }
             $this->setField($name, $value);
@@ -239,9 +239,13 @@ class Table {
         
         if (in_array($method, get_class_methods($this))) {
             return $this->$method();
-        } elseif (array_key_exists($name, $this->fields)) {
+        } //elseif (array_key_exists($name, $this->fields)) {
+            //if (in_array($name, $this->array_fields)) {
+            //    echo "<br>it's an array";
+            //    $this->fields[$name] = $this->sqlArrayToPHP[$this->fields[$name]];
+            //}
             return $this->fields[$name];
-        }
+        //}
     
     }
 
@@ -280,7 +284,7 @@ class Table {
                 if ($value == '' && in_array($name, $this->null_fields)) {
                     $this->fields[$name] = NULL;
                 } elseif (in_array($name, $this->array_fields) && !is_array($value)) {
-                    $value_array = $this->sqlArrayQuote($value);
+                    $value_array = $this->sqlArraytoPHP($value);
                     $this->fields[$name] = ($value_array) ?: [];
                 } else {
                     $this->fields[$name] = $value;
@@ -299,6 +303,9 @@ class Table {
      * @return void
      */
     protected function sqlArrayToPHP($value) {
+        if (is_array($value)) {
+            return $value;
+        }
         return explode(',',trim($value,'{} \t\n\r\0\x0B'));
     }
 

@@ -95,8 +95,11 @@ table.display td { text-align: left; vertical-align: top;}
 span.checkbox, span.radio { white-space: nowrap; display: inline-block }
 </style>
 <? if ($Group) {
-print_pre($g);
-echo "Group type {$g['group_type']}";
+  print_pre($g);
+  echo "Group type {$g['group_type']}";
+  foreach ($g['exercise_ids'] as $ex_id) {
+    Exercises::display($ex_id);
+  }
 } ?>
 
 <form method="post" action="edit.php">
@@ -137,7 +140,7 @@ echo "Group type {$g['group_type']}";
 </tr>
 </table>
 <button name="save">Save</button> 
-<? if ($group_id) { ?>
+<? if ($Group) { ?>
   <input type="hidden" name="group_id" value="<?=$g['id'];?>"/>
   <button name="saveToGroup">Save to Group</button>
 <? } ?>

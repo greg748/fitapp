@@ -22,11 +22,17 @@ class ExerciseGroups extends Table {
   }
 
   public function addExercise($exercise_id) {
-    echo "Adding $exercise_id to group";
-    $current = $this->getField('exercise_ids');
-    array_push($current, $exercise_id);
-    print_r($current);
+    $current = array_filter($this->getField('exercise_ids'));
+    if (count($current)) {
+      array_push($current, $exercise_id);
+    } else {
+      $current = [$exercise_id];
+    }
     $this->setField('exercise_ids', $current);
-    $this->save(TRUE); //debug remove this true
+    $this->save(); 
+    if (!$this->isSaved()) {
+      echo "<pre>Error\n".$this->lastSql()."\n".$this->errorMsg()."</pre>";
+      die;
+    }
   }
 }

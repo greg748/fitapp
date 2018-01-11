@@ -38,6 +38,14 @@ class Exercises extends Table {
 
   }
 
+  public static function display($id) {
+    $Exercise = static::get($id);
+    if ($Exercise) {
+      $e = $Exercise->getFields();
+      echo "{$e['name']} {$e['description']}<br>";
+    }
+  }
+
   /**
    * Gets Exercises from DB, based on filters, or all if none specified
    * @param mixed $filters
