@@ -1,0 +1,22 @@
+table.display {
+    border: 1px solid #999;
+}
+
+table.display th {
+    text-align: left;
+    vertical-align: top;
+    font-weight: bold;
+    font-size: 12px;
+    background-color: #ccc
+}
+
+table.display td {
+    text-align: left;
+    vertical-align: top;
+}
+
+span.checkbox,
+span.radio {
+    white-space: nowrap;
+    display: inline-block
+}

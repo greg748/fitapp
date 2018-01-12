@@ -152,7 +152,7 @@ class Table {
             if ($show_sql) {
                 echo "\n{$this->error_msg}";
             }
-            error_log("SQL erorr {$this->error_msg}\n$sql");
+            error_log("SQL error {$this->error_msg}\n$sql");
         }
         
         //check that the insert id has changed to show that the insert was successful
@@ -239,13 +239,9 @@ class Table {
         
         if (in_array($method, get_class_methods($this))) {
             return $this->$method();
-        } //elseif (array_key_exists($name, $this->fields)) {
-            //if (in_array($name, $this->array_fields)) {
-            //    echo "<br>it's an array";
-            //    $this->fields[$name] = $this->sqlArrayToPHP[$this->fields[$name]];
-            //}
+        } elseif (array_key_exists($name, $this->fields)) {
             return $this->fields[$name];
-        //}
+        }
     
     }
 

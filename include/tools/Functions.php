@@ -34,7 +34,6 @@ function radio($array, $fieldName = 'select', $default = '') {
 } 
 
 function checkbox($array, $fieldName = 'select', $default = []) {
-  print_r($default);
   $checkbox = '';
   foreach ($array as $key=>$value) {
     if ($value == '') {

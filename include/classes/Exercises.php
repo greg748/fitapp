@@ -2,7 +2,7 @@
 namespace Fitapp\classes;
 class Exercises extends Table {
 
-  public static $userPositions = ['standing','bench','kneeling','half-kneeling','seated','incline bench',
+  public static $userPositions = ['standing','bench','kneeling','half-kneeling','seated','incline bench', 'lying', 'lying knees at 90', 'lying legs at 45',
       'decline bench','roman chair','back extension','prone','plank','high plank'];
   public static $gripTypes = ['neutral','palm-in','palm-up','thumb-up','thumb-down', 'thumb-up-and-in','reverse','wide','narrow','hammer','foot','med-ball','multi'];
   public static $abilities = [1=>'beginner',2=>'basic',3=>'moderate',4=>'advanced',5=>'expert'];
@@ -42,7 +42,7 @@ class Exercises extends Table {
     $Exercise = static::get($id);
     if ($Exercise) {
       $e = $Exercise->getFields();
-      echo "{$e['name']} {$e['description']}<br>";
+      echo "<a href=\"edit.php?id={$e['id']}\">{$e['name']}</a> {$e['description']}<br>"; // this is temp output until I do something better
     }
   }
 

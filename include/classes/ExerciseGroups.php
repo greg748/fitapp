@@ -1,5 +1,7 @@
 <?php
 namespace Fitapp\classes;
+use Fitapp\classes\WorkoutItems;
+
 class ExerciseGroups extends Table {
 
   // this is an enum type
@@ -35,4 +37,16 @@ class ExerciseGroups extends Table {
       die;
     }
   }
+
+    public function addToWorkout($workout_id) {
+        $sql = "SELECT max(coalesce(ex_group_order,0)) 
+        FROM {$table_prefix}workout_items
+        WHERE workout_id=$workout_id";
+        $max_group = $this->db->GetOne($sql);
+        $next_group = $max_group++;
+        $data = ["workout_id"=>$workout_id, "ex_group_id"=>$this->getField('id'),"ex_group_order"=>$next_group];
+        $WI = WorkoutItems::create($data);
+        return $WI;
+
+     }
 }
