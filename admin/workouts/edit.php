@@ -3,8 +3,6 @@ require_once '../../init.php';
 use Fitapp\classes\Workouts;
 
 $id = $_REQUEST['id'];
-print_pre($_POST);
-
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['created_date'])) {

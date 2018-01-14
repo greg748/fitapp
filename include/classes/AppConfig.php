@@ -141,6 +141,13 @@ class AppConfig
     /**
      * @return mixed
      */
+    public function getAppDir() {
+        return $this->app_directory;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getLogDir() {
         return $this->log_dir;
     }

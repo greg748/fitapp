@@ -11,8 +11,9 @@ use Fitapp\classes\WeightTypes;
 use Fitapp\tools\Template;
 
 $id = $_REQUEST['id'];
+print_pre($_REQUEST);
 
-if (isset($_REQUEST['workout_id'])) {
+if (isset($_REQUEST['workout_id']) && $_REQUEST['workout_id'] > 0) {
     $Workout = Workouts::get($_REQUEST['workout_id']);
     $w = $Workout->getFields();
 }
@@ -30,19 +31,23 @@ if (isset($_POST['saveToGroup'])) {
     $Group = ExerciseGroups::get($_POST['group_id']);
 }
 
+$cache_clear = false;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['add_equipment']) && trim($_POST['add_equipment']) !='') {
         $add_id = Equipment::addIfUnique($_POST['add_equipment']);
         echo "New equipment id = $add_id";
-        array_push($_POST['equipment'], $add_id);
+        $_POST['equipment'][] =$add_id;
         $_POST['equipment'] = array_filter($_POST['equipment']);
+        $cache_clear = true;
     }
     if (isset($_POST['add_weight_type']) && trim($_POST['add_weight_type']) != '') {
         $add_id = WeightTypes::addIfUnique($_POST['add_weight_type']);
         echo "New weight type id = $add_id";
-        array_push($_POST['weight_type'], $add_id);
+        $_POST['weight_type'][] =$add_id;
         $_POST['weight_type'] = array_filter($_POST['weight_type']);
+        $cache_clear = true;
     }
+    print_pre($_POST);
   
     if ($id) {
         $Exercise = Exercises::get($id);
@@ -90,16 +95,16 @@ $muscles = Muscles::getMusclesForMenu();
 $primaryMuscles = radio($muscles, 'primary_musc', $e['primary_musc'], TRUE);
 $secondaryMuscles = checkbox($muscles, 'secondary_muscs[]', $e['secondary_muscs']);
 
-$equipmentMenu = checkbox(Equipment::getEquipmentMenu(), 'equipment[]', $e['equipment'], TRUE);
+$equipmentMenu = checkbox(Equipment::getEquipmentMenu($cache_clear), 'equipment[]', $e['equipment'], TRUE);
 
 $groupTypesMenu = menu(ExerciseGroups::$ex_group_types, 'group_type', $g['group_type'], FALSE, TRUE, FALSE);
 $workoutTypesMenu = checkbox(WorkoutTypes::getWorkoutTypes(), 'workout_type[]', $e['workout_type']);
-$weightTypesMenu = checkbox(WeightTypes::getWeightTypesMenu(), 'weight_type[]', $e['weight_type']);
+$weightTypesMenu = checkbox(WeightTypes::getWeightTypesMenu($cache_clear), 'weight_type[]', $e['weight_type']);
 Template::startPage("Edit Exercise");
 
 if (!$Workout) { ?>
 <h3>Start new Workout</h3>
-<? require_once '/admin/workouts/workout_input_form.php'; 
+<? require_once '../workouts/workout_input_form.php'; 
 } else {
     print_pre($w);
 } ?>

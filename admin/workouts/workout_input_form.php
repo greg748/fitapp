@@ -1,4 +1,7 @@
 <?php
+require_once '../../init.php';
+use Fitapp\classes\WorkoutTypes;
+global $w;
 $workoutTypesMenu = menu(WorkoutTypes::getWorkoutTypes(), 'workout_type', $w['workout_type'], FALSE);
 ?>
 <form action="/admin/workouts/edit.php" method="post">

@@ -27,10 +27,10 @@ class Equipment extends Table {
    * Gets Equipment from DB all if none specified
    * @return mixed Array of Equipment
    */
-  public function getEquipment() {
+  public function getEquipment($cache=60) {
     $sql = "SELECT * from
       {$this->table_prefix}{$this->table_name}";
-    $results = $this->db->CacheExecute($sql);
+    $results = $this->db->CacheExecute($cache, $sql);
     $equipment = [];
     foreach ($results as $r) {
       $equipment[$r['id']]=$r;
@@ -38,9 +38,10 @@ class Equipment extends Table {
     return $equipment;
   }
 
-  public static function getEquipmentMenu() {
+  public static function getEquipmentMenu($clearCache = false) {
     $Equipment = static::getNewSelf();
-    $equipList = $Equipment->getEquipment();
+    $cacheParam = ($clearCache) ? 0 : 60;
+    $equipList = $Equipment->getEquipment($cacheParam);
     $menu = [];
     foreach ($equipList as $e) {
       $menu[$e['id']] = $e['name'];

@@ -43,7 +43,7 @@ class ExerciseGroups extends Table {
         FROM {$table_prefix}workout_items
         WHERE workout_id=$workout_id";
         $max_group = $this->db->GetOne($sql);
-        $next_group = $max_group++;
+        $next_group = max($max_group,0)+1;
         $data = ["workout_id"=>$workout_id, "ex_group_id"=>$this->getField('id'),"ex_group_order"=>$next_group];
         $WI = WorkoutItems::create($data);
         return $WI;

@@ -1,5 +1,7 @@
 <?php
 namespace Fitapp\classes;
+use Fitapp\classes\AppConfig;
+
 class Exercises extends Table {
 
   public static $userPositions = ['standing','bench','kneeling','half-kneeling','seated','incline bench', 'lying', 'lying knees at 90', 'lying legs at 45',
@@ -39,11 +41,18 @@ class Exercises extends Table {
   }
 
   public static function display($id) {
-    $Exercise = static::get($id);
-    if ($Exercise) {
-      $e = $Exercise->getFields();
-      echo "<a href=\"edit.php?id={$e['id']}\">{$e['name']}</a> {$e['description']}<br>"; // this is temp output until I do something better
+    $Config = AppConfig::get();
+    $adminDir = $Config->getAppDir().'/admin';
+    $e = [];
+    if (is_array($id)) {
+      $e = $id;
+    } else {
+      $Exercise = static::get($id);
+      if ($Exercise) {
+        $e = $Exercise->getFields();
+      }
     }
+    include "$adminDir/exercises/display.php";
   }
 
   /**

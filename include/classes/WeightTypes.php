@@ -26,11 +26,11 @@ class WeightTypes extends Table {
    * Gets Equipment from DB, based on workout type, or all if none specified
    * @return mixed Array of weight types
    */
-  public function getWeightTypes() {
+  public function getWeightTypes($cache = 60) {
     $sql = "SELECT * from
       {$this->table_prefix}{$this->table_name}
       ";
-    $results = $this->db->CacheExecute($sql);
+    $results = $this->db->CacheExecute($cache, $sql);
     $weight_types = [];
     foreach ($results as $r) {
       $weight_types[$r['id']]=$r;
@@ -38,11 +38,13 @@ class WeightTypes extends Table {
     return $weight_types;
   }
 
-  public static function getWeightTypesMenu() {
+  public static function getWeightTypesMenu($clearCache) {
     $WeightTypes = static::getNewSelf();
-    $sql = "SELECT id, name FROM weight_types 
+    $cacheParam = ($clearCache) ? 0 : 60;
+    $sql = "SELECT id, name 
+    FROM weight_types 
     WHERE status='a'";
-    $results = $WeightTypes->db->CacheExecute(7200, $sql);
+    $results = $WeightTypes->db->CacheExecute($cacheParam, $sql);
     $wt = [];
     foreach ($results as $r) {
       $wt[$r['id']] = $r['name'];

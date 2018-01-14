@@ -3,7 +3,7 @@
 namespace FitApp\classes;
 
 use ADOConnection;
-use FitApp\exceptions\Exception;
+// use FitApp\exceptions\Exception;
 
 /**
  * class DBConnection
@@ -24,7 +24,7 @@ class DBConnection {
         return static::$instance;
     }
 
-    /**
+    /**"Unable to connect to $dsn"
      * Constructor only gets called once.  This is a singleton pattern to make sure only one connection is created.
      *
      * @param bool
@@ -45,7 +45,8 @@ class DBConnection {
         if ($this->db_connection instanceof \ADOConnection) {
             $this->db_connection->SetFetchMode(ADODB_FETCH_ASSOC); // this sets so we only return column names.
         } else {
-            throw new Exception("Unable to connect to $dsn", ALERT, null, ['dsn'=>$dsn, 'environment'=>$Config->environment]);
+            // throw new Exception("Unable to connect to $dsn", ALERT, null, ['dsn'=>$dsn, 'environment'=>$Config->environment]);
+            error_log("Unable to connect to $dsn");
         }
     }
 
