@@ -1,8 +1,13 @@
 <?php
 require_once '../../init.php';
 use Fitapp\classes\Workouts;
-
+use Fitapp\classes\RegimenWorkouts;
+global $rw_id;
 $id = $_REQUEST['id'];
+if (isset($_REQUEST['rw_id'])) {
+    $rw_id = $_REQUEST['rw_id'];
+    $RWO = RegimenWorkouts::get($rw_id);
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['created_date'])) {
@@ -22,6 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             print_r($Workout->problemFields());
             die;
         }
+        if (isset($rw_id)) {
+            $RWO->setField('workout_id',$id);
+            $RWO->save();
+        }
     } else {
         $Workout = Workouts::create($_POST);
         if (!$Workout) {
@@ -29,6 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die;
         }
         $id = $Workout->getField('id');
+        if (isset($rw_id)) {
+            $RWO->setField('workout_id',$id);
+            $RWO->save();
+        }
         if (isset($_POST['createAdd'])) {
             header("Location: /admin/exercises/edit.php?workout_id={$id}");
             die;
@@ -43,5 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $w = [];
     }
+}
+if (isset($RWO) && $w['workout_type'] == '') {
+    $regimen = $RWO->getRegimenData();
+    $w['workout_type'] = $RWO->getField('workout_type');
+    $w['created_by'] = $regimen['created_by'];
+    $w['user_id'] = $regimen['user_id'];
 }
 require_once 'workout_input_form.php';

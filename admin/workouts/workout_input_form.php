@@ -1,11 +1,12 @@
 <?php
 require_once '../../init.php';
 use Fitapp\classes\WorkoutTypes;
-global $w;
+global $w, $rw_id;
 $workoutTypesMenu = menu(WorkoutTypes::getWorkoutTypes(), 'workout_type', $w['workout_type'], FALSE);
 ?>
 <form action="/admin/workouts/edit.php" method="post">
 <input type="hidden" name="id" value="<?=$w['id'];?>"/>
+<input type="hidden" name="rw_id" value="<?=$rw_id;?>"/>
 Name: <input type="text" name="name" value="<?=$w['name'];?>"/><br>
 Workout Type: <?=$workoutTypesMenu;?><br>
 Create Date: <input type="date" name="create_date" value="<?=$w['create_date'];?>"/><br>
