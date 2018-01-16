@@ -104,7 +104,7 @@ Template::startPage("Edit Exercise");
 
 if (!$Workout) { ?>
 <h3>Start new Workout</h3>
-<? require_once '../workouts/workout_input_form.php'; 
+<? require_once '../workouts/workout_input_foTRUErm.php'; 
 } else {
     print_pre($w);
 } ?>

@@ -15,8 +15,51 @@ table.display td {
     vertical-align: top;
 }
 
+table.crud {
+    border: 1px solid #999;
+}
+table.crud th {
+    font-weight: bold;
+    width: 125px;
+    text-align: right;
+    vertical-align: top;
+    padding-top: 4px;
+    font-size: 12px;
+}
+table.crud td {
+    font-size: 12px;
+    text-align: left;
+    vertical-align: top;
+    padding-top: 4px;
+}
+
 span.checkbox,
 span.radio {
     white-space: nowrap;
     display: inline-block
+}
+div.exercise {
+    display: block;
+    border: 1px solid red;
+}
+div.exercise div {
+    display: inline-block;
+    vertical-align: top;
+    border: 1px solid blue;
+    width: 125px;
+}
+div.exercise .exerciseName {
+    width: 125px;
+}
+div.exercise .exerciseDesc {
+    width: 200px;
+}
+div.exercise .primaryMuscle {
+    width: 125px;
+}
+div.exercise .secondaryMuscles {
+    width: 125px;
+}
+div.exercise .equipment {
+    width: 100px;
 }

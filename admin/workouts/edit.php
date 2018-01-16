@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       
     if ($id) {
         $Workout = Workouts::get($id);
-        $Workout->setFields($_POST, TRUE);
+        $Workout->setFields($_POST);
         $Workout->save();
         // error check
         if (!$Workout->isSaved()) {
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die;
         }
     } else {
-        $Workout = Workouts::create($_POST, TRUE);
+        $Workout = Workouts::create($_POST);
         if (!$Workout) {
             echo "<pre>Error! ".$db->lastSql(). "\n". $db->errorMsg(). "</pre>";
             die;

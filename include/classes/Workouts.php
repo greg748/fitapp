@@ -52,16 +52,14 @@ class Workouts extends Table {
 
     public function getExercises() {
         $workout_id = $this->getField('id');
-        $sql = "SELECT wei.ex_group_order, wei.group_type, wei.ex_id,
-            e.name as ex_name, e.nicknames, e.primary_musc, m.name as primary_musc_name,
-            e.secondary_muscs, string_agg(sm.name, ',') as secondary_musc_names,
+        $sql = "SELECT wei.ex_group_order, wei.group_type, wei.ex_id, wei.ex_group_id,
+            e.name as ex_name, e.nicknames, e.primary_musc, emn.primary_musc_name,
+            e.secondary_muscs, emn.secondary_musc_names,
             e.description, e.ability_level
             FROM workout_exercise_ids wei
             JOIN exercises e on e.id=wei.ex_id
-            JOIN muscles m on m.id=e.primary_musc
-            LEFT JOIN muscles sm on sm.id = ANY(e.secondary_muscs)
+            JOIN exercise_muscle_names emn on emn.id=e.id
             WHERE wei.workout_id =  {$workout_id}
-            GROUP BY 1,2,3,4,5,6,7,8,10,11
             ORDER BY wei.ex_group_order";
         $results = $this->db->Execute($sql);
         echo $this->db->errorMsg();
@@ -75,14 +73,23 @@ class Workouts extends Table {
    */
   public function getMuscleScores() {
     $workout_id = $this->getField('id');
-    $sql = "SELECT muscle_name, SUM(score) AS muscle_score
+    $sql ="SELECT name as muscle_name, 0 as primary_score, 0 as secondary_score from muscles";
+    $results = $this->db->Execute($sql);
+    $scores = [];
+    foreach ($results as $r) {
+        $scores[$r['muscle_name']] = $r;
+    }
+    $sql = "SELECT muscle_name, SUM(primary_score) AS primary_score, SUM(secondary_score) as secondary_score
         FROM exercise_muscles em
         JOIN workout_exercise_ids wei ON wei.ex_id=em.exercise_id
         WHERE wei.workout_id=$workout_id
         GROUP BY muscle_name
         ORDER BY 2 DESC";
     $results = $this->db->Execute($sql);
-    return $results;
+    foreach ($results as $r) {
+        $scores[$r['muscle_name']] = $r;
+    }
+    return $scores;
   }
   
 }

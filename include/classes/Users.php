@@ -15,16 +15,26 @@ class Users extends Table {
       'password' => '',
       'created' => NULL,
       'last_login' => NULL,
+      'lastmodified'=> NULL,
       'timezone' => '',
       'status' => 'a',
     ];
 
-    $this->no_insert = ['id','created','last_login'];
-    $this->no_save = ['created','last_login'];
+    $this->no_insert = ['id','created','last_login','lastmodified'];
+    $this->no_save = ['created'];
     parent::__construct();
 
   }
 
-  
+  public static function getAll() {
+    $Users = static::getNewSelf();
+    $sql = "SELECT * from users order by lastname asc";
+    $users = [];
+    $results = $Users->db->Execute($sql);
+    foreach ($results as $r) {
+      $users[$r['id']] = $r;
+    }
+    return $users;
+  }
 
 }

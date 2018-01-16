@@ -18,7 +18,7 @@ class Template {
 <html>
 <title>$title</title>
 <head>
-<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/basestyles.css\" media=\"screen\"/>
+<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/basestyles.css\"/>
 </head>
 <body>";
         echo $start;
@@ -30,7 +30,7 @@ class Template {
      * @return void
      */
     public static function endPage($funcs = []) {
-        $end = "";
+        $end = "done";
         echo $end;
     }
 
