@@ -1,7 +1,9 @@
 <?php
 require_once '../../init.php';
 use Fitapp\classes\Workouts;
+use Fitapp\tools\Template;
 use Fitapp\classes\RegimenWorkouts;
+
 global $rw_id;
 $id = $_REQUEST['id'];
 if (isset($_REQUEST['rw_id'])) {
@@ -63,4 +65,6 @@ if (isset($RWO) && $w['workout_type'] == '') {
     $w['created_by'] = $regimen['created_by'];
     $w['user_id'] = $regimen['user_id'];
 }
+Template::startPage('Edit Workout');
 require_once 'workout_input_form.php';
+Template::endPage();

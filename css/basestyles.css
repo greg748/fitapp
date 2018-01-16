@@ -1,3 +1,48 @@
+body {
+    font-family: 'Ubuntu', sans-serif;
+    padding: 0px; margin: 0px;
+}
+th {
+    font-family: 'Oswald', sans-serif;
+}
+
+header {
+    height: 100px;
+    width: 100%;
+    background: #000000;
+    margin-bottom: 1em;
+
+}
+
+header div#logo {
+    padding: 12px;
+    font-size: 4.5em;
+}
+
+header div#logo a {
+    font-family: 'Supermercado One', cursive !important;
+    text-decoration:none;
+    color: #ffffff;
+}
+
+header div#menu {
+    background-color: #00AAFF;
+    height: 18px;
+    margin-bottom: 12px;
+}
+
+div#menu a {
+    color: #000000;
+    margin-right: 12px;
+    text-decoration: none;
+
+}
+
+div#content {
+    padding: 1em;
+    margin-top: 15px;
+}
+
 table.display {
     border: 1px solid #999;
 }

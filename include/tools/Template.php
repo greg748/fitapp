@@ -11,16 +11,29 @@ class Template {
      *
      * @param String $title Page Title
      * 
+     * <link href=\"https://fonts.googleapis.com/css?family=Amiri|Libre+Baskerville|Oswald|Supermercado+One|Titillium+Web|Ubuntu\" rel=\"stylesheet\"> 
      * @return void
      */
     public static function startPage($title = "Page Title") {
         $start = "
-<html>
-<title>$title</title>
-<head>
-<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/basestyles.css\"/>
+        <html>
+        <title>$title</title>
+        <head>
+        <link href=\"https://fonts.googleapis.com/css?family=Oswald:700|Supermercado+One|Ubuntu\" rel=\"stylesheet\"> 
+        <link rel=\"stylesheet\" type=\"text/css\" href=\"/css/basestyles.css\"/>
 </head>
-<body>";
+<body>
+<header>
+        <div id=\"logo\"><a href=\"/\">fitapp.mobi</a></div>
+        <div id=\"menu\">
+        <a href=\"/admin/users/\">Users</a>
+        <a href=\"/admin/workouts/\">Workouts</a>
+        <a href=\"/admin/exercises/\">Exercises</a>
+        <a href=\"/admin/trainers/\">Trainers</a>
+        </div>
+</header>
+<div id=\"content\">
+";
         echo $start;
     }
 
@@ -32,6 +45,10 @@ class Template {
     public static function endPage($funcs = []) {
         $end = "done";
         echo $end;
+        echo 
+    "</div>
+    </body>
+    </html>";
     }
 
 
