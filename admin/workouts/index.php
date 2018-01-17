@@ -45,8 +45,8 @@ foreach ($workouts as $wo) {
     echo "<td>{$wo['firstname']} {$wo['laststname']} ({$wo['username']})</td>";
     echo "<td>{$wo['cb_firstname']} {$wo['cb_laststname']} ({$wo['cb_username']})</td>";
     echo "<td>{$wo['notes']}</td>";
-    echo "<td></td>";
-    echo "</tr>/n";
+    echo "<td><a href=\"/admin/exercises/edit.php?workout_id={$wo['id']}\">Add Exercises</a></td>";
+    echo "</tr>\n";
 }
 ?>
 </table>

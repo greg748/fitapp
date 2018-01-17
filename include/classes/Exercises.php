@@ -41,31 +41,6 @@ class Exercises extends Table {
     parent::__construct();
 
   }
-  DROP TABLE public.exercises;
-
-CREATE TABLE public.exercises
-(
-    id serial primary key,
-    name text COLLATE pg_catalog."default",
-    nicknames text[] COLLATE pg_catalog."default",
-    primary_musc integer,
-    secondary_muscs integer[],
-    description text COLLATE pg_catalog."default",
-    ability_level integer,
-   equipment integer[],
-    user_position text COLLATE pg_catalog."default",
-    workout_type integer[],
-    grip text COLLATE pg_catalog."default",
-    weight_type integer[],
-    image text COLLATE pg_catalog."default",
-    video text COLLATE pg_catalog."default",
-    status character(1) COLLATE pg_catalog."default" DEFAULT 'a'::bpchar,
-    created_by integer,
-    created timestamp without time zone DEFAULT now(),
-    lastmodified timestamp without time zone default now(),
-    notes text COLLATE pg_catalog."default",
-    stored_json json
-)
 
   public static function display($id) {
     $Config = AppConfig::get();

@@ -31,10 +31,10 @@ class ExerciseGroups extends Table {
     public function getNextExerciseOrdinal() {
         $workout_id = $this->getField('workout_id');
         $group_id = $this->getField('id');
-        $sql = "SELECT MAX(coalesce(exercise_order,0))+1
+        $sql = "SELECT COALESCE(MAX(exercise_order),0)+1
             FROM workout_exercises
             WHERE workout_id=$workout_id
-            AND group_id=$group_id";
+            AND exercise_group_id=$group_id";
         return $this->db->getOne($sql);
 
     }

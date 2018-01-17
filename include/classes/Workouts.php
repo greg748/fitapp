@@ -59,8 +59,8 @@ class Workouts extends Table {
      */
     public function getNextGroupOrdinal() {
         $workout_id = $this->getField('id');
-        $sql = "SELECT max(coalesce(group_order,0))+1
-            FROM {$this->table_prefix}workout_groups
+        $sql = "SELECT COALESCE(MAX(group_order),0)+1
+            FROM {$this->table_prefix}exercise_groups
             WHERE workout_id=$workout_id";
         return $this->db->GetOne($sql);
   }
@@ -68,8 +68,8 @@ class Workouts extends Table {
     public function getExercises() {
         $workout_id = $this->getField('id');
         $sql = "SELECT eg.group_order as exercise_group_order, eg.group_type, we.exercise_id, eg.id as exercise_group_id,
-            coalesce(we.nickname_used, e.name) as exercise_name, e.primary_musc, ei.primary_musc_name,
-            e.secondary_muscs,  ei.secondary_musc_names,
+            coalesce(we.nickname_used, e.name) as exercise_name, e.primary_musc, ei.primary_muscle_name,
+            e.secondary_muscs,  ei.secondary_muscle_names,
             e.description, e.ability_level, e.grip, e.user_position, ei.equipment, ei.weight_type
             FROM workout_exercises we
             JOIN exercises e on e.id = we.exercise_id
@@ -78,7 +78,6 @@ class Workouts extends Table {
             WHERE we.workout_id={$workout_id}
             ORDER BY eg.group_order, we.exercise_order";
         $results = $this->db->Execute($sql);
-        echo "<br><pre>$sql<br>".$this->db->errorMsg()."</pre>";
           $exercises = [];
           $userPositions = Exercises::$userPositions;
           $gripTypes = Exercises::$gripTypes;
@@ -108,8 +107,8 @@ class Workouts extends Table {
     }
     $sql = "SELECT muscle_name, SUM(primary_score) AS primary_score, SUM(secondary_score) as secondary_score
         FROM exercise_muscles em
-        JOIN workout_exercises we ON wei.exercise_id=em.exercise_id
-        WHERE wei.workout_id=$workout_id
+        JOIN workout_exercises we ON we.exercise_id=em.exercise_id
+        WHERE we.workout_id=$workout_id
         GROUP BY muscle_name
         ORDER BY 2 DESC";
     $results = $this->db->Execute($sql);

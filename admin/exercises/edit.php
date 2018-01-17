@@ -11,12 +11,12 @@ use Fitapp\classes\WeightTypes;
 use Fitapp\tools\Template;
 
 $id = $_REQUEST['id'];
-print_pre($_REQUEST);
 
 if (isset($_REQUEST['workout_id']) && $_REQUEST['workout_id'] > 0) {
     $Workout = Workouts::get($_REQUEST['workout_id']);
     $w = $Workout->getFields();
     $nextGroupOrdinal = $Workout->getNextGroupOrdinal();
+    echo $db->errorMsg();
 }
 
 if (isset($_POST['saveNewGroup'])) {
@@ -48,11 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_POST['weight_type'] = array_filter($_POST['weight_type']);
         $cache_clear = true;
     }
-    print_pre($_POST);
     
     if ($id) {
         $Exercise = Exercises::get($id);
         $Exercise->setFields($_POST);
+        print_r($_POST);
         $Exercise->save();
         // error check
         if (!$Exercise->isSaved()) {
@@ -71,9 +71,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     if ($Group) {
         $group_id = $Group->getField('id');
-        $workout_id ($Workout) ? $Workout->getField('id') : NULL;
+        $workout_id = ($Workout) ? $Workout->getField('id') : NULL;
         $nextExerciseOrdinal = $Group->getNextExerciseOrdinal();
-        $nickname_used ($_REQUEST['nickname_used']) ?: NULL;
+        $nickname_used = ($_REQUEST['nickname_used']) ?: NULL;
         $rep_pattern = ($_REQUEST['rep_pattern']) ?: [12,10,8];
         $exercise_item = [
             'exercise_id'=>$id,
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 } else {
-    if (isset($id)) {
+    if (isset($id)) { 
         $e = Exercises::get($id)->getFields();
     } else {
         $e = [];
@@ -112,22 +112,18 @@ $groupTypesMenu = menu(ExerciseGroups::$exercise_group_types, 'group_type', $g['
 $workoutTypesMenu = checkbox(WorkoutTypes::getWorkoutTypes(), 'workout_type[]', $e['workout_type']);
 $weightTypesMenu = checkbox(WeightTypes::getWeightTypesMenu($cache_clear), 'weight_type[]', $e['weight_type']);
 Template::startPage("Edit Exercise");
-
-if (!$Workout) { ?>
+if (!$Workout) { ?>notes
 <h3>Start new Workout</h3>
-<? require_once '../workouts/workout_input_foTRUErm.php'; 
+<?php require_once '../workouts/workout_input_form.php'; 
 } else {
-    print_pre($w);
-} ?>
-<? if ($Group) {
-    echo "Group type {$g['group_type']}";
+    $Workout->getExercises();
     foreach ($g['exercise_ids'] as $ex_id) {
         Exercises::display($ex_id);
     }
 } ?>
-
 <form method="post" action="edit.php">
 <input type="hidden" name="id" value="<?=$e['id']?>"/>
+<input type="hidden" name="group_id" value="<?=$g['id'];?>"/>
 <input type="hidden" name="workout_id" value="<?=$w['id']?>"/>
 <table class="display">
 <tr>
@@ -154,7 +150,7 @@ if (!$Workout) { ?>
     <th>Weight Type</th>
 </tr>
 <tr>
-    <td><textarea name="notes" id="description" rows="3" cols="25"><?=$e['description'];?></textarea></td>
+    <td><textarea name="description" id="description" rows="3" cols="25"><?=$e['description'];?></textarea></td>
     <td><?= $equipmentMenu; ?><br>
         <input type="text" name="add_equipment" value = ''/></td>
     <td><?= $userPositionsMenu; ?></td>
@@ -165,10 +161,11 @@ if (!$Workout) { ?>
 </tr>
 </table>
 <button name="save">Save</button> 
-<? if ($Group) { ?>
-  <input type="hidden" name="group_id" value="<?=$g['id'];?>"/>
+<?php //@todo add rep pattern
+
+if ($Group) { ?>
   <button name="saveToGroup">Save to Group</button>
-<? } ?>
+<?php } ?>
 <button name="saveNewGroup">Save to New Group</button><?=$groupTypesMenu;?>
 </form>
-<? Template::endPage();
+<?php Template::endPage();
