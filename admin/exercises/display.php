@@ -8,6 +8,8 @@ global $e;
 <div class="primaryMuscle"><?=$e['primary_musc_name']; ?></div>
 <div class="secondaryMuscles"><?=$e['secondary_musc_names']; ?></div>
 <div class="equipment"><?=$e['equipment']; ?></div>
+<div class="weightType"><?=$e['weight_type']; ?></div>
+<div class="grip"><?=$e['grip']; ?></div>
+<div class="user_position"><?=$e['user_position']; ?></div>
+<div class="ability"><?=$e['ability_level']; ?></div>
 </div>
-
-Display

@@ -16,7 +16,7 @@ class Exercises extends Table {
     $this->fields = [
       'id' => 0,
       'name' => '',
-      'nicknames' => '',
+      'nicknames' => [],
       'primary_musc' => 0,
       'secondary_muscs' => [],
       'description' => '',
@@ -31,14 +31,41 @@ class Exercises extends Table {
       'status' => 'a',
       'created_by' => 0,
       'notes' => '',
-      'created' => NULL // @todo add lastmodified?
+      'created' => NULL, 
+      'lastmodified' => NULL,
+      'stored_json' => NULL, // will be used to store a cached version of the exercise
     ];
-    $this->array_fields = ['secondary_muscs','equipment','workout_type','weight_type'];
-    $this->no_insert = ['id', 'created'];
-    $this->no_save = ['created'];
+    $this->array_fields = ['secondary_muscs','equipment','workout_type','weight_type','nicknames'];
+    $this->no_insert = ['id', 'created','lastmodified'];
+    $this->no_save = ['created','lastmodified'];
     parent::__construct();
 
   }
+  DROP TABLE public.exercises;
+
+CREATE TABLE public.exercises
+(
+    id serial primary key,
+    name text COLLATE pg_catalog."default",
+    nicknames text[] COLLATE pg_catalog."default",
+    primary_musc integer,
+    secondary_muscs integer[],
+    description text COLLATE pg_catalog."default",
+    ability_level integer,
+   equipment integer[],
+    user_position text COLLATE pg_catalog."default",
+    workout_type integer[],
+    grip text COLLATE pg_catalog."default",
+    weight_type integer[],
+    image text COLLATE pg_catalog."default",
+    video text COLLATE pg_catalog."default",
+    status character(1) COLLATE pg_catalog."default" DEFAULT 'a'::bpchar,
+    created_by integer,
+    created timestamp without time zone DEFAULT now(),
+    lastmodified timestamp without time zone default now(),
+    notes text COLLATE pg_catalog."default",
+    stored_json json
+)
 
   public static function display($id) {
     $Config = AppConfig::get();

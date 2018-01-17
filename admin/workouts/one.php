@@ -9,19 +9,14 @@ $Workout = Workouts::get($_REQUEST['id']);
 $exercises = $Workout->getExercises();
 $scores = $Workout->getMuscleScores();
 Template::startPage('Exercises for this Workout');
-?>
-<svg class="muscle-groups" height="400" width="800" xmlns="http://www.w3.org/2000/svg">
-      <?php include_once '../../img/body_diagram.svg'; ?>
-</svg>
-<?php
 $group_id = '';
 foreach ($exercises as $e) {
-    if ($e['ex_group_id'] != $group_id) {
+    if ($e['excerise_group_id'] != $group_id) {
         echo "<h3>{$e['group_type']}</h3>";
-        $group_id= $e['ex_group_id'];
+        $group_id= $e['excerise_group_idd'];
     }
     Exercises::display($e['id']);
-    print_pre($e);
+    //print_pre($e);
 }
 $style='.muscle-groups svg path { fill: #ffffff; stroke-width: 1px; stroke-color: #666666;} ';
 foreach ($scores as $s) {
@@ -41,6 +36,11 @@ foreach ($scores as $s) {
         fill: #{$s['css']} !important;
       }";
 }
+?>
+<svg class="muscle-groups" height="400" width="800" xmlns="http://www.w3.org/2000/svg">
+      <?php include_once '../../img/body_diagram.svg'; ?>
+</svg>
+<?php
 // $style = ".muscle-groups svg #Abs path { fill: #999900 !important; }";
 echo "<style>$style</style>"; 
 Template::endPage();

@@ -6,7 +6,7 @@ use Fitapp\classes\ExerciseGroups;
 use Fitapp\classes\Muscles;
 use Fitapp\classes\Workouts;
 use Fitapp\classes\WorkoutTypes;
-use Fitapp\classes\WorkoutItems;
+use Fitapp\classes\WorkoutExercises;
 use Fitapp\classes\WeightTypes;
 use Fitapp\tools\Template;
 
@@ -16,16 +16,17 @@ print_pre($_REQUEST);
 if (isset($_REQUEST['workout_id']) && $_REQUEST['workout_id'] > 0) {
     $Workout = Workouts::get($_REQUEST['workout_id']);
     $w = $Workout->getFields();
+    $nextGroupOrdinal = $Workout->getNextGroupOrdinal();
 }
 
 if (isset($_POST['saveNewGroup'])) {
-    $newGroup = ['group_type'=>$_POST['group_type']];
+    $newGroup = ['workout_id'=>$_POST['workout_id'],'group_type'=>$_POST['group_type'], 'group_order'=>$nextGroupOrdinal];
     $Group = ExerciseGroups::create($newGroup);
     if (!$Group) {
         print_pre($_POST);
         die;
     }
-    $Group->addToWorkout($w['id']);
+    
 }
 if (isset($_POST['saveToGroup'])) {
     $Group = ExerciseGroups::get($_POST['group_id']);
@@ -48,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $cache_clear = true;
     }
     print_pre($_POST);
-  
+    
     if ($id) {
         $Exercise = Exercises::get($id);
         $Exercise->setFields($_POST);
@@ -60,9 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             print_r($Exercise->problemFields());
             die;
         }
-        if (isset($_POST['saveNewGroup']) && $Group) {
-            $Group->addExercise($id);
-        }
     } else {
         $Exercise = Exercises::create($_POST);
         if (!$Exercise) {
@@ -70,9 +68,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die;
         }
         $id = $Exercise->getField('id');
-        if ($Group) {
-            $Group->addExercise($id);
-        }
+    }
+    if ($Group) {
+        $group_id = $Group->getField('id');
+        $workout_id ($Workout) ? $Workout->getField('id') : NULL;
+        $nextExerciseOrdinal = $Group->getNextExerciseOrdinal();
+        $nickname_used ($_REQUEST['nickname_used']) ?: NULL;
+        $rep_pattern = ($_REQUEST['rep_pattern']) ?: [12,10,8];
+        $exercise_item = [
+            'exercise_id'=>$id,
+            'workout_id' => $workout_id,
+            'exercise_group_id' => $group_id,
+            'exercise_order' => $nextExerciseOrdinal,
+            'nickname_used' => $nickname_used,
+            'rep_pattern'=> $rep_pattern
+          ];
+        $WorkoutExercise = WorkoutExercises::create($exercise_item);
     }
 
 } else {
@@ -97,7 +108,7 @@ $secondaryMuscles = checkbox($muscles, 'secondary_muscs[]', $e['secondary_muscs'
 
 $equipmentMenu = checkbox(Equipment::getEquipmentMenu($cache_clear), 'equipment[]', $e['equipment'], TRUE);
 
-$groupTypesMenu = menu(ExerciseGroups::$ex_group_types, 'group_type', $g['group_type'], FALSE, TRUE, FALSE);
+$groupTypesMenu = menu(ExerciseGroups::$exercise_group_types, 'group_type', $g['group_type'], FALSE, TRUE, FALSE);
 $workoutTypesMenu = checkbox(WorkoutTypes::getWorkoutTypes(), 'workout_type[]', $e['workout_type']);
 $weightTypesMenu = checkbox(WeightTypes::getWeightTypesMenu($cache_clear), 'weight_type[]', $e['weight_type']);
 Template::startPage("Edit Exercise");

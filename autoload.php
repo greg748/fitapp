@@ -121,9 +121,6 @@ class Autoloader {
             $this->classMap[$class] = false;
         }
 
-        // @todo commented out because of too much noise from WSDL service
-        //GelfLogger::publish('Mapped File Not Found', ERROR, 'Autoloader', ['prefix' => $prefix, 'rel_class' => $relative_class])
-
         // never found a mapped file
         return FALSE;
     }
