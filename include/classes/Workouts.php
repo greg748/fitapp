@@ -1,10 +1,11 @@
 <?php
 namespace Fitapp\classes;
 use \Fitapp\classes\Exercises;
+use \Fitapp\traits\ScorableTrait;
 
 class Workouts extends Table {
 
-  
+  use ScorableTrait;
 
     function __construct() {
         $this->table_name = 'workouts';
@@ -78,44 +79,17 @@ class Workouts extends Table {
             WHERE we.workout_id={$workout_id}
             ORDER BY eg.group_order, we.exercise_order";
         $results = $this->db->Execute($sql);
-          $exercises = [];
-          $userPositions = Exercises::$userPositions;
-          $gripTypes = Exercises::$gripTypes;
-          $abilities = Exercises::$abilities;
-          foreach ($results as $r) {
+        $exercises = [];
+        $userPositions = Exercises::$userPositions;
+        $gripTypes = Exercises::$gripTypes;
+        $abilities = Exercises::$abilities;
+        foreach ($results as $r) {
             $r['user_position'] = $userPositions[$r['user_position']];
             $r['grip'] = $gripTypes[$r['grip']];
             $r['ability_level'] = $abilities[$r['ability_level']];
             $exercises[] = $r;
-           
-          }
+        }
         return $exercises;
   }
 
-  /**
-   * Scores the workout based on muscle groups used
-   *
-   * @return ADORecordSet Muscles and their scores
-   */
-  public function getMuscleScores() {
-    $workout_id = $this->getField('id');
-    $sql ="SELECT name as muscle_name, 0 as primary_score, 0 as secondary_score from muscles";
-    $results = $this->db->Execute($sql);
-    $scores = [];
-    foreach ($results as $r) {
-        $scores[$r['muscle_name']] = $r;
-    }
-    $sql = "SELECT muscle_name, SUM(primary_score) AS primary_score, SUM(secondary_score) as secondary_score
-        FROM exercise_muscles em
-        JOIN workout_exercises we ON we.exercise_id=em.exercise_id
-        WHERE we.workout_id=$workout_id
-        GROUP BY muscle_name
-        ORDER BY 2 DESC";
-    $results = $this->db->Execute($sql);
-    foreach ($results as $r) {
-        $scores[$r['muscle_name']] = $r;
-    }
-    return $scores;
-  }
-  
 }

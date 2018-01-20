@@ -5,7 +5,7 @@ use Fitapp\classes\WorkoutExercises;
 class ExerciseGroups extends Table {
 
     // this is an enum type
-    public static $exercise_group_types = ['warmup', 'main', 'warmdown', 'cardio', 'active_recovery'];
+    public static $exercise_group_types = ['warmup', 'main', 'warmdown', 'cardio', 'active_recovery','dynamic_stretching','pyramid','fatigue','drop_set'];
 
     function __construct() {
     $this->table_name = 'exercise_groups';

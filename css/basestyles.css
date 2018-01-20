@@ -85,19 +85,20 @@ span.radio {
 }
 div.exercise {
     display: block;
-    border: 1px solid red;
+    margin-top: 4px;
+    font-size: 14px;
 }
 div.exercise div {
     display: inline-block;
     vertical-align: top;
-    border: 1px solid blue;
     width: 125px;
 }
 div.exercise .exerciseName {
     width: 125px;
 }
 div.exercise .exerciseDesc {
-    width: 200px;
+    width: 270px;
+    font-size: 12px;
 }
 div.exercise .primaryMuscle {
     width: 125px;
@@ -108,3 +109,9 @@ div.exercise .secondaryMuscles {
 div.exercise .equipment {
     width: 100px;
 }
+
+div.scoreTable { display: inline-block; width: 350px; vertical-align: top; border: 1px solid #ccc}
+div.scoreDiagram { display: inline-block; width: 400px; border: 1px solid #ccc;}
+div.scoreMuscle { clear: left; display: inline-block; width: 125px; }
+div.scorePrimary, div.scoreSecondary, div.scoreColor { display: inline-block; width: 75px} 
+div.header { font-weight: bold; }

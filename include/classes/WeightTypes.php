@@ -22,23 +22,8 @@ class WeightTypes extends Table {
 
   }
 
-  /**
-   * Gets Equipment from DB, based on workout type, or all if none specified
-   * @return mixed Array of weight types
-   */
-  public function getWeightTypes($cache = 60) {
-    $sql = "SELECT * from
-      {$this->table_prefix}{$this->table_name}
-      ";
-    $results = $this->db->CacheExecute($cache, $sql);
-    $weight_types = [];
-    foreach ($results as $r) {
-      $weight_types[$r['id']]=$r;
-    } 
-    return $weight_types;
-  }
-
-  public static function getWeightTypesMenu($clearCache) {
+  /* @todo determine if this can be handled by trait */
+  public static function getMenu($clearCache) {
     $WeightTypes = static::getNewSelf();
     $cacheParam = ($clearCache) ? 0 : 60;
     $sql = "SELECT id, name 

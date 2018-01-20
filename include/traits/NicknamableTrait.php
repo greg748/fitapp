@@ -23,4 +23,30 @@ trait NicknamableTrait {
     return $id;
   }
 
+    /**
+   * Gets [Item] from DB all if none specified
+   * @return mixed Array of [Items]
+   */
+  public function getAll($cache=60) {
+    $sql = "SELECT * from
+      {$this->table_prefix}{$this->table_name}";
+    $results = $this->db->CacheExecute($cache, $sql);
+    $items = [];
+    foreach ($results as $r) {
+      $items[$r['id']]=$r;
+    } 
+    return $items;
+  }
+
+  public static function getMenu($clearCache = false) {
+    $Object = static::getNewSelf();
+    $cacheParam = ($clearCache) ? 0 : 60;
+    $list = $Object->getAll($cacheParam);
+    $menu = [];
+    foreach ($list as $e) {
+      $menu[$e['id']] = $e['name'];
+    }
+    return ksort($menu);
+  }
+
 }

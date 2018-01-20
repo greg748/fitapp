@@ -2,11 +2,11 @@
 namespace Fitapp\classes;
 use Fitapp\traits\NicknamableTrait;
 
-class Equipment extends Table {
+class ExerciseClassifiers extends Table {
   use NicknamableTrait;
 
   function __construct() {
-    $this->table_name = 'equipment';
+    $this->table_name = 'exercise_classifiers';
     $this->table_prefix = '';
     $this->pkey = 'id';
     $this->fields = [
