@@ -13,10 +13,11 @@ class ExerciseClassifiers extends Table {
       'id' => 0,
       'name' => '',
       'nicknames' => [],
+      'workout_types'=>[],
       'status' => 'a',
       'created' => null,
     ];
-    $this->array_fields = ['nicknames'];
+    $this->array_fields = ['nicknames', 'workout_types'];
     $this->no_insert = ['id', 'created'];
     $this->no_save = ['created'];
     parent::__construct();

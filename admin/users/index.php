@@ -25,30 +25,7 @@ Template::startPage('Users');
         echo "<td>{$u['created']}</td>";        
         echo "<td>{$u['last_login']}</td>";
         echo "</tr>\n";
-        // print_pre($u);
-        /* 
-        [5] => Array
-        (
-            [regimen_workout_id] => 5
-            [regimen_id] => 2
-            [id] => 2
-            [user_id] => 1
-            [created_by] => 0
-            [name] => 
-            [regimen_type] => Chest/Back/Legs/Shoulders + Cardio
-            [created] => 2018-01-16 18:03:00.258269
-            [lastmodified] => 2018-01-16 18:03:00.258269
-            [inactive_date] => 
-            [status] => a
-            [regimen_name] => 
-            [created_user_name] => 
-            [workout_type] => Shoulders
-            [add_date] => 2018-01-08
-            [remove_date] => 
-            [workout_id] => 
-            [workout_name] => 
-        )
-        */
+        
         $regimens = Regimens::getActiveForUser($u['id']);
         if (count($regimens) > 0) {
             foreach ($regimens as $r) {

@@ -1,0 +1,47 @@
+create table exercise_classifiers (
+    id serial primary key,
+    name text,
+    nicknames text[],
+    workout_types integer[],
+    status char(1) default 'a':bpchar,
+    created timestamp default now() 
+);
+
+insert into exercise_classifiers (name, workout_types) values 
+('push-up','{1,2,4,6,7}'), 
+('pull-up','{1,2,5,6,}'), 
+('pec press','{1,2,4}'), 
+('pec press - incline','{1,2,4}'),
+('pec press - decline','{1,2,4}'), 
+('row','{1,2,5,6}'), 
+('front raise','{1,2,4,5,6}'), 
+('lateral raise','{1,2,4,5,6}'),
+('internal rotation','{1,2,4,6}'), 
+('external rotation','{1,2,5,6}'), 
+('biceps curl','{1,2,4}'), 
+('triceps extension','{1,2,5}'),
+('military press','{1,2,4,5,6}'), 
+('flye','{1,2,4,6}'), 
+('flye - incline','{1,2,4,6}'), 
+('flye - decline','{1,2,4,6}'),
+('reverse flye', '{11,2,5,6}')
+('squat','{1,3,}'), 
+('leg press','{1,3}'),
+('hamstring curl','{1,3}'), 
+('leg extension','{1,3}'),
+('leg abduction','{1,3}'), 
+('leg adduction','{1,3}'), 
+('crunch','{1,2,3,4,5,6}'), 
+('sit up','{1,2,3,4,5,6}'),
+('plank','{1,2,3,4,5,6}'), 
+('v up','{1,2,3,4,5,6}'), 
+('leg raise','{1,3,7}'),
+('deadlift','{1,3}'),
+('jump','{1,3,7,8}'), 
+('chop','{1,2,4,5,6}'), 
+('lunge','{1,3}'), 
+('back extension','{1,3,5,7}'),
+('stretch','{1,2,3,4,5,6,7,8}'),
+('cardio','{1,8}'),
+('core','{1,2,3,4,5,6,7}');
+

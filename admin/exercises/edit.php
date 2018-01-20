@@ -115,8 +115,8 @@ $secondaryMuscles = checkbox($muscles, 'secondary_muscs[]', $e['secondary_muscs'
 $equipmentMenu = checkbox(Equipment::getMenu($cache_clear), 'equipment[]', $e['equipment'], TRUE);
 
 $groupTypesMenu = menu(ExerciseGroups::$exercise_group_types, 'group_type', $g['group_type'], FALSE, TRUE, FALSE);
-$workoutTypesMenu = checkbox(WorkoutTypes::getWorkoutTypes(), 'workout_type[]', $e['workout_type']);
 $weightTypesMenu = checkbox(WeightTypes::getMenu($cache_clear), 'weight_type[]', $e['weight_type']);
+$workoutTypesMenu = checkbox(WorkoutTypes::getWorkoutTypes(), 'workout_type[]', $e['workout_type']);
 
 if ($Workout) {
     $exercisesMenu = menu(Exercises::getExercisesMenu(['workout_type'=>$w['workout_type']]),'id','', TRUE, FALSE);
