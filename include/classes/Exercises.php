@@ -19,6 +19,7 @@ class Exercises extends Table {
       'id' => 0,
       'name' => '',
       'nicknames' => [],
+      'classifier' => 0,
       'primary_musc' => 0,
       'secondary_muscs' => [],
       'description' => '',
@@ -55,7 +56,7 @@ class Exercises extends Table {
     }
     echo <<<DISP
     <div class="exercise">
-<div class="exerciseName"><a href="/admin/exercises/edit.php?id={$exercise['exercise_id']}">{$exercise['exercise_name']}</a></div>
+<div class="exerciseName"><a href="/admin/exercises/edit.php?id={$exercise['exercise_id']}">{$exercise['exercise_name']}</a><br>{$exercise['classifier']}</div>
 <div class="exerciseDesc">{$exercise['description']}</div>
 <div class="primaryMuscle">{$exercise['primary_muscle_name']}</div>
 <div class="secondaryMuscles">{$exercise['secondary_muscle_names']}</div>
@@ -96,18 +97,18 @@ DISP;
       $filters = $Exercises->filterExercises($filters);
       $sql = "SELECT eg.group_order as exercise_group_order, eg.group_type, we.exercise_id, eg.id as exercise_group_id,
       coalesce(we.nickname_used, e.name) as exercise_name, e.primary_musc, ei.primary_muscle_name,
-      e.secondary_muscs,  ei.secondary_muscle_names,
+      e.secondary_muscs,  ei.secondary_muscle_names, ec.name as classifier,
       e.description, e.ability_level, e.grip, e.user_position, ei.equipment, ei.weight_type
       FROM workout_exercises we
       JOIN exercises e on e.id = we.exercise_id
       JOIN exercise_groups eg on eg.id=we.exercise_group_id
       JOIN exercise_info ei on ei.id=e.id
+      LEFT JOIN exercise_classifiers ec on ec.id=e.classifier
       WHERE e.status='a'
       {$filters}
       ORDER BY eg.group_order, we.exercise_order";
     $results = $Exercises->db->Execute($sql);
     echo $Exercises->db->errorMsg();
-    print_pre($sql);
     $exercises = [];
     $userPositions = Exercises::$userPositions;
     $gripTypes = Exercises::$gripTypes;

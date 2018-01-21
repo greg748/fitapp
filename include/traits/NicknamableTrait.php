@@ -29,7 +29,8 @@ trait NicknamableTrait {
    */
   public function getAll($cache=60) {
     $sql = "SELECT * from
-      {$this->table_prefix}{$this->table_name}";
+      {$this->table_prefix}{$this->table_name}
+      order by name";
     $results = $this->db->CacheExecute($cache, $sql);
     $items = [];
     foreach ($results as $r) {
@@ -46,7 +47,7 @@ trait NicknamableTrait {
     foreach ($list as $e) {
       $menu[$e['id']] = $e['name'];
     }
-    return ksort($menu);
+    return $menu;
   }
 
 }

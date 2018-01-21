@@ -3,6 +3,7 @@ require_once '../../init.php';
 use Fitapp\classes\Equipment;
 use Fitapp\classes\Exercises;
 use Fitapp\classes\ExerciseGroups;
+use Fitapp\classes\ExerciseClassifiers;
 use Fitapp\classes\Muscles;
 use Fitapp\classes\Workouts;
 use Fitapp\classes\WorkoutTypes;
@@ -49,6 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_POST['weight_type'] = array_filter($_POST['weight_type']);
         $cache_clear = true;
     }
+    if (isset($_POST['add_classifier']) && trim($_POST['add_classifier']) != '') {
+        $add_id = ExerciseClassifiers::addIfUnique($_POST['add_classifier']);
+        $_POST['classifier'] = $add_id;
+        $cache_clear = true;
+    }
     
     if (!isset($_POST['existing'])) {
         if ($id) {
@@ -62,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 print_r($Exercise->problemFields());
                 die;
             }
+            header('Location: /admin/exercises/');
         } else {
             $Exercise = Exercises::create($_POST);
             if (!$Exercise) {
@@ -109,6 +116,7 @@ $abiltitiesMenu = menu(Exercises::$abilities, 'ability_level', $e['ability_level
 $userPositionsMenu = menu(Exercises::$userPositions, 'user_position', $e['user_position'], FALSE);
 
 $muscles = Muscles::getMusclesForMenu();
+// @todo primary only muscles and secondary muscle grouping for scoring
 $primaryMuscles = radio($muscles, 'primary_musc', $e['primary_musc'], TRUE);
 $secondaryMuscles = checkbox($muscles, 'secondary_muscs[]', $e['secondary_muscs']);
 
@@ -117,26 +125,24 @@ $equipmentMenu = checkbox(Equipment::getMenu($cache_clear), 'equipment[]', $e['e
 $groupTypesMenu = menu(ExerciseGroups::$exercise_group_types, 'group_type', $g['group_type'], FALSE, TRUE, FALSE);
 $weightTypesMenu = checkbox(WeightTypes::getMenu($cache_clear), 'weight_type[]', $e['weight_type']);
 $workoutTypesMenu = checkbox(WorkoutTypes::getWorkoutTypes(), 'workout_type[]', $e['workout_type']);
+$classifiersMenu = menu(ExerciseClassifiers::getMenu(), 'classifier', $e['classifier'], TRUE, FALSE);
 
 if ($Workout) {
     $exercisesMenu = menu(Exercises::getExercisesMenu(['workout_type'=>$w['workout_type']]),'id','', TRUE, FALSE);
 }
 
 Template::startPage("Edit Exercise");
-if (!$Workout) { ?>notes
-<h3>Start new Workout</h3>
-<?php require_once '../workouts/workout_input_form.php'; 
-} else {
+if ($Workout) { 
     $exercises = $Workout->getExercises();
     $group_id = '';
     foreach ($exercises as $ex) {
-    if ($ex['exercise_group_id'] != $group_id) {
-        echo "<h3>{$ex['group_type']} ({$ex['exercise_group_id']}) <a href=\"/admin/exercises/edit.php?group_id={$ex['exercise_group_id']}\">Add to this group</a></h3>";
-        $group_id = $ex['exercise_group_id'];
+        if ($ex['exercise_group_id'] != $group_id) {
+            echo "<h3>{$ex['group_type']} ({$ex['exercise_group_id']}) <a href=\"/admin/exercises/edit.php?group_id={$ex['exercise_group_id']}\">Add to this group</a></h3>";
+            $group_id = $ex['exercise_group_id'];
+        }
+        Exercises::display($ex);
     }
-    Exercises::display($ex);
-}
-} ?>
+?>
 <form method="post" action="edit.php">
 <input type="hidden" name="existing" value="true"/>
 <input type="hidden" name="group_id" value="<?=$g['id'];?>"/>
@@ -147,6 +153,7 @@ if (!$Workout) { ?>notes
 <?php } ?>
 <button name="addToNewGroup">Add to New Group</button><?=$groupTypesMenu;?>
 </form>
+<? } ?>
 <form method="post" action="edit.php">
 <input type="hidden" name="id" value="<?=$e['id']?>"/>
 <input type="hidden" name="group_id" value="<?=$g['id'];?>"/>
@@ -169,6 +176,7 @@ if (!$Workout) { ?>notes
     <td><textarea name="notes" id="notes" rows="3" cols="25"><?=$e['notes'];?></textarea></td>
 </tr>
 <tr>
+    <th>Exercise Classifier</th>
     <th>Description</th>
     <th>Equipment</th>
     <th>User Position</th>
@@ -176,6 +184,8 @@ if (!$Workout) { ?>notes
     <th>Weight Type</th>
 </tr>
 <tr>
+    <td><?= $classifiersMenu; ?><br>
+        <input type="text" name="add_classifier" value = ''/></td>
     <td><textarea name="description" id="description" rows="8" cols="45"><?=$e['description'];?></textarea></td>
     <td><?= $equipmentMenu; ?><br>
         <input type="text" name="add_equipment" value = ''/></td>

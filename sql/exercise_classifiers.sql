@@ -9,7 +9,8 @@ create table exercise_classifiers (
 
 insert into exercise_classifiers (name, workout_types) values 
 ('push-up','{1,2,4,6,7}'), 
-('pull-up','{1,2,5,6,}'), 
+('pull-up','{1,2,5,6}'), 
+('dip','{1,2,5,6}'), 
 ('pec press','{1,2,4}'), 
 ('pec press - incline','{1,2,4}'),
 ('pec press - decline','{1,2,4}'), 
@@ -25,7 +26,7 @@ insert into exercise_classifiers (name, workout_types) values
 ('flye - incline','{1,2,4,6}'), 
 ('flye - decline','{1,2,4,6}'),
 ('reverse flye', '{11,2,5,6}')
-('squat','{1,3,}'), 
+('squat','{1,3}'), 
 ('leg press','{1,3}'),
 ('hamstring curl','{1,3}'), 
 ('leg extension','{1,3}'),
