@@ -8,22 +8,26 @@ use Fitapp\tools\Template;
 $id = $_REQUEST['id'];
 $referrer = $_SERVER['HTTP_REFERER'];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // @todo check to see if group is part of any workout_instances
-    if (isset($_POST['delete'])) {
-        $Group = ExerciseGroups::get($id);
-        $g = $Group->getFields();
-        $Workout = Workouts::get($g['workout_id']);
-        if ($Workout) {
-            $exercises = $Workout->getExercises($g['id']);
-        }
+if (isset($_REQUEST['delete'])) {
+    $Group = ExerciseGroups::get($id);
+    $g = $Group->getFields();
+    $Workout = Workouts::get($g['workout_id']);
+    if ($Workout) {
+        $exercises = $Workout->getExercises($g['id']);
         foreach ($exercises as $e) {
             $exercise_remove_id = $e['workout_exercise_id'];
             WorkoutExercises::removeFromGroup($exercise_remove_id);
         }
-
-
+        $Workout->deleteGroup($g['id']);
+        header("Location /admin/workouts/one.php?id={$g['workout_id']}");
+        die;
     }
+    header("Location $referrer");
+    die;
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // @todo check to see if group is part of any workout_instances
     if ($id) {
         $Group = ExerciseGroups::get($id);
         $Group->setFields($_POST);

@@ -37,7 +37,7 @@ Template::startPage('Users');
                     echo "<td>{$rw['workout_type']}</td>";     
                     echo "<td>{$rw['add_date']}</td>";  
                     if ($rw['workout_id'] > 0) {
-                        echo "<td><a href=\"../workouts/edit.php?id={$rw['workout_id']}\">{$rw['workout_name']}</a> ({$rw['workout_id']})</td>";
+                        echo "<td><a href=\"../workouts/one.php?id={$rw['workout_id']}\">{$rw['workout_name']}</a> ({$rw['workout_id']})</td>";
                     } else {
                         echo "<td><a href=\"../workouts/edit.php?rw_id={$rw['regimen_workout_id']}\">Build</a></td>";
                     }

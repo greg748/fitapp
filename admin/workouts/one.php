@@ -8,11 +8,14 @@ use Fitapp\tools\Template;
 $Workout = Workouts::get($_REQUEST['id']);
 $exercises = $Workout->getExercises();
 $scores = $Workout->getMuscleScores();
-Template::startPage('Exercises for this Workout');
+Template::startPage($Workout->getField('name') . ': Exercises');
 $group_id = '';
 foreach ($exercises as $e) {
     if ($e['exercise_group_id'] != $group_id) {
-        echo "<h3>{$e['group_type']} ({$e['exercise_group_id']}) <a href=\"/admin/exercises/edit.php?group_id={$e['exercise_group_id']}\">Add to this group</a></h3>";
+        echo "<h3>{$e['exercise_group_order']} {$e['group_type']}"; 
+        echo "<a href=\"/admin/exercises/edit.php?group_id={$e['exercise_group_id']}\">Add to this group</a> ";
+        echo "<a href=\"/admin/groups/edit.php?id={$e['exercise_group_id']}\">Edit group</a> ";
+        echo "<a href=\"/admin/groups/edit.php?id={$e['exercise_group_id']}&delete=delete\">Delete from Workout</a></h3>";
         $group_id = $e['exercise_group_id'];
     }
     Exercises::display($e);

@@ -30,6 +30,7 @@ header div#menu {
     height: 18px;
     margin-bottom: 12px;
 }
+h3 a { padding-left: 12px; }
 
 div#menu a {
     color: #000000;

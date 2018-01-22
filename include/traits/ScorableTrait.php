@@ -45,7 +45,6 @@ trait ScorableTrait {
             GROUP BY muscle_name, e.ability_level
             ORDER BY 2 DESC";
             $results = $this->db->Execute($sql);
-            print_pre($sql);
             echo $this->db->errorMsg();
         $abilityMults = Exercises::$abilityMultipliers;
         foreach ($results as $r) {
@@ -75,7 +74,7 @@ trait ScorableTrait {
         $scoreTable =  "<div class=\"scoreMuscle header\">Muscle</div>";
         $scoreTable .= "<div class=\"scorePrimary header\">Primary</div>";
         $scoreTable .= "<div class=\"scoreSecondary Header\">Secondary</div>";
-        $scoreTable .= "<div class=\"scoreColor Header\">Color</div>";
+        //$scoreTable .= "<div class=\"scoreColor Header\">Color</div>";
         $primaryTotal = 0.0;
         
         foreach ($scores as $s) {
@@ -83,7 +82,7 @@ trait ScorableTrait {
             $s['total_score'] = $s['primary_score'] + $s['secondary_score'];
             $s['css'] = 'ffffff';
             $s['group_name'] = str_replace(' ','-',ucWords($s['muscle_name']));
-            if ($s['total_score'] > 0) { 
+            if ($s['total_score'] >= 0) { 
                 $secondary_segment = min($secondary_segments-1, ceil($s['secondary_score']*10));
                 $primary_segment = min($primary_segments-1, ceil($s['primary_score']));
                 if ($s['primary_score'] == 0) {
@@ -96,7 +95,7 @@ trait ScorableTrait {
                 $scoreTable .= "<div class=\"scoreMuscle\">".ucWords($s['muscle_name'])."</div>";
                 $scoreTable .= "<div class=\"scorePrimary\">".$s['primary_score']."</div>";
                 $scoreTable .= "<div class=\"scoreSecondary\">".$s['secondary_score']."</div>";
-                $scoreTable .= "<div class=\"scoreColor\">".$s['css']."</div>";
+                // $scoreTable .= "<div class=\"scoreColor\">".$s['css']."</div>";
                 $scoreTable .= "\n";
                 $primaryTotal += $s['primary_score'];
             }

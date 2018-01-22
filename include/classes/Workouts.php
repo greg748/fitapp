@@ -1,6 +1,7 @@
 <?php
 namespace Fitapp\classes;
 use \Fitapp\classes\Exercises;
+use \Fitapp\classes\ExerciseGroups;
 use \Fitapp\traits\ScorableTrait;
 
 class Workouts extends Table {
@@ -93,6 +94,25 @@ class Workouts extends Table {
             $exercises[] = $r;
         }
         return $exercises;
-  }
-
+    }
+    
+    public function deleteGroup($group_id) {
+        $ExerciseGroup = ExerciseGroups::get($group_id);
+        $group_order = $ExerciseGroup->getField('group_order');
+        if ($ExerciseGroup) {
+            $sql = "DELETE FROM exercise_groups 
+                WHERE id=$group_id
+                CASCADE";
+            $result = $this->db->Execute($sql);
+            if ($result) {
+                $workout_id = $this->getField('id');
+                $sql = "UPDATE exercise_groups 
+                    SET group_order = group_order-1
+                    WHERE workout_id=$group_id  
+                    AND group_order > $group_order";
+                $updates = $this->db->Execute($sql);
+            }
+        }
+        return $result;
+    }
 }

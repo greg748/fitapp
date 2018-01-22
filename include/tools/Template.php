@@ -33,6 +33,7 @@ class Template {
         </div>
 </header>
 <div id=\"content\">
+<h1>$title</h1>
 ";
         echo $start;
     }

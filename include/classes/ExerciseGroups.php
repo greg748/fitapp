@@ -36,7 +36,6 @@ class ExerciseGroups extends Table {
             WHERE workout_id=$workout_id
             AND exercise_group_id=$group_id";
         return $this->db->getOne($sql);
-
     }
-
+    
 }

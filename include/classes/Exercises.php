@@ -92,9 +92,10 @@ DISP;
    * @param mixed $filters
    * @return mixed Array of exercises
    */
-  public static function getExercises($filters = NULL) {
+  public static function getExercises($filters = NULL, $sort = NULL) {
       $Exercises = static::getNewSelf();
       $filters = $Exercises->filterExercises($filters);
+      $sort = ($sort) ??  'eg.group_order, we.exercise_order';
       $sql = "SELECT eg.group_order as exercise_group_order, eg.group_type, we.exercise_id, eg.id as exercise_group_id,
       coalesce(we.nickname_used, e.name) as exercise_name, e.primary_musc, ei.primary_muscle_name,
       e.secondary_muscs,  ei.secondary_muscle_names, ec.name as classifier,
@@ -106,7 +107,7 @@ DISP;
       LEFT JOIN exercise_classifiers ec on ec.id=e.classifier
       WHERE e.status='a'
       {$filters}
-      ORDER BY eg.group_order, we.exercise_order";
+  ORDER BY {$sort}";
     $results = $Exercises->db->Execute($sql);
     echo $Exercises->db->errorMsg();
     $exercises = [];
