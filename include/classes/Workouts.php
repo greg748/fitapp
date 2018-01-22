@@ -66,9 +66,12 @@ class Workouts extends Table {
         return $this->db->GetOne($sql);
   }
 
-    public function getExercises() {
+    public function getExercises($group_id = NULL) {
+        $group_filter = ($group_id > 0) ? "AND eg.id=$group_id" : '';
         $workout_id = $this->getField('id');
-        $sql = "SELECT eg.group_order as exercise_group_order, eg.group_type, we.exercise_id, eg.id as exercise_group_id,
+        $sql = "SELECT eg.group_order as exercise_group_order, eg.group_type, 
+            we.exercise_id, we.exercise_order, eg.id as exercise_group_id,
+            we.id as workout_exercise_id, 
             coalesce(we.nickname_used, e.name) as exercise_name, e.primary_musc, ei.primary_muscle_name,
             e.secondary_muscs,  ei.secondary_muscle_names,
             e.description, e.ability_level, e.grip, e.user_position, ei.equipment, ei.weight_type
@@ -76,7 +79,7 @@ class Workouts extends Table {
             JOIN exercises e on e.id = we.exercise_id
             JOIN exercise_groups eg on eg.id=we.exercise_group_id
             JOIN exercise_info ei on ei.id=e.id
-            WHERE we.workout_id={$workout_id}
+            WHERE we.workout_id={$workout_id} {$group_filter}
             ORDER BY eg.group_order, we.exercise_order";
         $results = $this->db->Execute($sql);
         $exercises = [];

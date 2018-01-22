@@ -15,3 +15,9 @@ insert into muscles (name,region,workout_type) values
 ('triceps','arm','{1,2,5}'),
 ('glutes','leg','{1,3}'),
 ('serratus','core','{1,2,5,7}');
+
+insert into muscles (name,region,workout_type) values 
+('deltoid-posterior','shoulders','{1,2,6}'),
+('deltoid-anterior','shoulders','{1,2,6}'),
+('glute meds','leg','{1,3}');
+update muscles set name='deltoid-lateral' where name='deltoid';

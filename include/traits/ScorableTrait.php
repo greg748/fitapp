@@ -60,6 +60,7 @@ trait ScorableTrait {
     
     public static function getScoreBlock($scores = [], $wrapper_id = 'wrapper123') {
         $blue_low = array(255, 255, 255); //'#ddddff';
+        $blue_low = [173, 204, 255];
         $blue_high = [0, 0, 255]; //'#020277';
         $red_low = array(255, 255, 255);
         $red_high = array(225,0,0);

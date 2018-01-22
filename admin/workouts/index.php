@@ -39,13 +39,14 @@ Template::startPage("Workouts");
 <?php
 foreach ($workouts as $wo) {
     echo "<tr>";
-    echo "<td><a href=\"/admin/workouts/edit.php?id={$wo['id']}\">{$wo['name']}</a>";
+    echo "<td><a href=\"/admin/workouts/one.php?id={$wo['id']}\">{$wo['name']}</a>";
     echo "<td>{$wo['workout_type_name']}</td>";
     echo "<td>{$wo['create_date']}</td>";
     echo "<td>{$wo['firstname']} {$wo['laststname']} ({$wo['username']})</td>";
     echo "<td>{$wo['cb_firstname']} {$wo['cb_laststname']} ({$wo['cb_username']})</td>";
     echo "<td>{$wo['notes']}</td>";
-    echo "<td><a href=\"/admin/exercises/edit.php?workout_id={$wo['id']}\">Add Exercises</a></td>";
+    echo "<td><a href=\"/admin/exercises/edit.php?workout_id={$wo['id']}\">Add Exercises</a>
+    <a href=\"/admin/workouts/edit.php?id={$wo['id']}\">Edit</a></td>";
     echo "</tr>\n";
 }
 ?>

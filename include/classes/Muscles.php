@@ -28,7 +28,8 @@ class Muscles extends Table {
     $filter = ($workout_type) ? "AND workout_type=$workout_type" : '';
     $sql = "SELECT * from
       {$Muscle->table_prefix}{$Muscle->table_name}
-      WHERE true {$filter}";
+      WHERE true {$filter}
+      ORDER BY name";
     $results = $Muscle->db->CacheExecute($sql);
     $muscles = [];
     foreach ($results as $r) {

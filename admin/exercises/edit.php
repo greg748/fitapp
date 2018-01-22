@@ -122,7 +122,6 @@ $secondaryMuscles = checkbox($muscles, 'secondary_muscs[]', $e['secondary_muscs'
 
 $equipmentMenu = checkbox(Equipment::getMenu($cache_clear), 'equipment[]', $e['equipment'], TRUE);
 
-$groupTypesMenu = menu(ExerciseGroups::$exercise_group_types, 'group_type', $g['group_type'], FALSE, TRUE, FALSE);
 $weightTypesMenu = checkbox(WeightTypes::getMenu($cache_clear), 'weight_type[]', $e['weight_type']);
 $workoutTypesMenu = checkbox(WorkoutTypes::getWorkoutTypes(), 'workout_type[]', $e['workout_type']);
 $classifiersMenu = menu(ExerciseClassifiers::getMenu(), 'classifier', $e['classifier'], TRUE, FALSE);
@@ -130,6 +129,7 @@ $classifiersMenu = menu(ExerciseClassifiers::getMenu(), 'classifier', $e['classi
 if ($Workout) {
     $exercisesMenu = menu(Exercises::getExercisesMenu(['workout_type'=>$w['workout_type']]),'id','', TRUE, FALSE);
 }
+$groupTypesMenu = menu(ExerciseGroups::$exercise_group_types, 'group_type', $g['group_type'], FALSE, TRUE, FALSE);
 
 Template::startPage("Edit Exercise");
 if ($Workout) { 
@@ -137,7 +137,9 @@ if ($Workout) {
     $group_id = '';
     foreach ($exercises as $ex) {
         if ($ex['exercise_group_id'] != $group_id) {
-            echo "<h3>{$ex['group_type']} ({$ex['exercise_group_id']}) <a href=\"/admin/exercises/edit.php?group_id={$ex['exercise_group_id']}\">Add to this group</a></h3>";
+            echo "<h3>{$ex['group_type']} ({$ex['exercise_group_id']})";
+            echo "<a href=\"/admin/exercises/edit.php?group_id={$ex['exercise_group_id']}\">Add to this group</a>";
+            echo "<a href=\"/admin/groups/edit.php?id={$ex['exercise_group_id']}\">Edit Group</a></h3>";
             $group_id = $ex['exercise_group_id'];
         }
         Exercises::display($ex);
