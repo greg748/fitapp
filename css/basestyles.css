@@ -110,6 +110,21 @@ div.exercise .secondaryMuscles {
 div.exercise .equipment {
     width: 100px;
 }
+div.exerciseSet {
+    display: inline-block;
+}
+div.exerciseSet exerciseSetType {
+    display: inline-block;
+} 
+div.exerciseSet exerciseWeight {
+    display: inline-block;
+}
+div.exerciseSet exerciseUnits {
+    display: inline-block;
+}
+div.exerciseSet exerciseReps {
+    display: inline-block;
+}
 
 div.scoreTable { display: inline-block; width: 350px; vertical-align: top; border: 1px solid #ccc}
 div.scoreDiagram { display: inline-block; width: 400px; border: 1px solid #ccc;}
