@@ -42,27 +42,63 @@ if (!$WorkoutInstance) {
 }
 $group_id = NULL;
 foreach ($exercises as $e) {
+    $defaultWeight = 'lbs'; // @todo set from weight type
     if ($e['exercise_group_id'] != $group_id) {
         echo "<h3>{$e['group_type']}</h3>";
         $group_id=$e['exercise_group_id'];
     }
+    echo "<div class=\"exercise\">";
     echo "<div class=\"exerciseName\">{$e['exercise_name']}</div>";
     if ($WorkoutInstance) {
         $nextSet = $WorkoutInstance->getNextSetOrdinal($e['exercise_id']);
-        $varPrefix = "ex_{$e['exercise_id']}_{$nextSet}";
-        $unitsMenu = menu(Sets::$units,"{$varPrefix}_units",'',TRUE, FALSE);
-        $setTypesMenu = menu(Sets::$set_types,"{$varPrefix}_type", '', FALSE, TRUE);
-        
-        echo "<div class=\"exerciseSet\">";
-        echo "<div class=\"exerciseSetType\">$setTypesMenu</div>";
-        echo "<div class=\"exerciseWeight\">Weight <input type=\"number\" step=\"0.1\" name=\"{$varPrefix}_weight\"></div>";
-        echo "<div class=\"exerciseUnits\">$unitsMenu</div>";
-        echo "<div class=\"exerciseReps\">Reps <input type=\"number\" step=\"1\" name=\"{$varPrefix}_reps\"></div>";
-        echo "</div>";
+        for ($i = 0; $i < 4; $i ++) {
+            
+            $varPrefix = "ex_{$e['exercise_id']}_{$nextSet}";
+            $unitsMenu = menu(Sets::$units,"{$varPrefix}_units",$defaultWeight,FALSE, FALSE);
+            $setTypesMenu = menu(Sets::$set_types,"{$varPrefix}_type", '', FALSE, FALSE);
+            
+            echo "<div class=\"exerciseSet\" id=\"$varPrefix\">";
+            echo "<div class=\"exerciseSetType\">$setTypesMenu</div>";
+            echo "<div class=\"exerciseWeight\"><label>Weight</label> <input class=\"weightInput\" 
+            placeholder=\"10\" type=\"number\" step=\"0.1\" name=\"{$varPrefix}_weight\"> $unitsMenu</div>";
+            echo "<div class=\"exerciseReps\"><label>Reps</label> <input type=\"number\" class=\"repsInput\" step=\"1\" name=\"{$varPrefix}_reps\"></div>";
+            echo "</div>";
+            $nextSet++;
+        }
     }
+    echo "</div>";
 }
 ?>
+<style>
+div.exerciseSet {
+    border: 1px solid green;
+    display: inline-block;
+    width: 175px !important;
+}
+div.exerciseSet exerciseSetType {
+    display: inline-block;
+} 
+div.exerciseSet exerciseWeight {
+    display: inline;
+}
+div.exerciseWeight select {
+    display: inline !important;
+}
+div.exerciseSet exerciseUnits {
+    display: inline;
+}
+div.exerciseSet exerciseReps {
+    display: inline;
+}
+input.weightInput, input.repsInput {
+    width: 50px;
+}
+div.exerciseSet label {
+    width: 60px;
+    display: inline-block;
+}
 
+</style>
 
 <?php
 Template::endPage();

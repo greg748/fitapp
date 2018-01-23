@@ -3,8 +3,8 @@ namespace Fitapp\classes;
 class Sets extends Table {
 
     public static $set_types = ['bilateral'=>'bilateral','single'=>'single','alt'=>'alt',
-        'alt-high'=>'alt-high','alt-low'=>'alt-low'];
-    public static $units = ['lbs'=>'lbs','kg'=>'kg'];
+        'alt-high'=>'alt-high','alt-low'=>'alt-low','time'=>'time'];
+    public static $units = [''=>'--','lbs'=>'lbs','kg'=>'kg'];
     function __construct() {
         $this->table_name = 'sets';
         $this->table_prefix = '';
