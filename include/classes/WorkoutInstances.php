@@ -27,7 +27,7 @@ class WorkoutInstances extends Table {
     public function getNextSetOrdinal($exercise_id = 0) {
         $wi_id = $this->getField('id');
         $sql = "SELECT COALESCE(MAX(set_order),0)+1
-            FROM sets
+            FROM exercise_sets
             WHERE workout_instance_id=$wi_id
             AND exercise_id=$exercise_id";
         return $this->db->getOne($sql);
@@ -35,9 +35,27 @@ class WorkoutInstances extends Table {
     
     public function getSets() {
         $wi_id = $this->getField('id');
-        $sql = "SELECT * FROM sets 
+        $sql = "SELECT * FROM exercise_sets 
         WHERE workout_instance_id=$wi_id
-        ORDER by exercise_id, set_order";
+        ORDER by group_id, exercise_id, set_order";
+        $results = $this->db->Execute($sql);
+        echo $sql;
+        
+        return $results;
+    }
+
+    public function getSetsForInputs() {
+        $sets = $this->getSets();
+        $inputs = [];
+        foreach ($sets as $set) {
+            $varPrefix = "ex_{$set['group_id']}_{$set['exercise_id']}_{$set['set_order']}";
+            $inputs["{$varPrefix}_type"] = $set['set_type'];
+            $inputs["{$varPrefix}_weight"] = $set['weight'];
+            $inputs["{$varPrefix}_units"] = $set['units'];
+            $inputs["{$varPrefix}_reps"] = $set['reps'];
+            $inputs["{$varPrefix}_id"] = $set['id'];
+        }
+        return $inputs;
     }
     
 }
