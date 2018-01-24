@@ -1,28 +1,24 @@
 <?php
 namespace Fitapp\api;
 
+use Fitapp\classes\Users;
 use Fitapp\api\RestService;
-use Fitapp\classes\SelfServiceApp;
-use Fitapp\classes\Project;
 
 /*
-
 Service is responsible for the following calls:
-campaigns
-    GET /campaigns - get a list of current campaigns (this is an optional endpoint)
-    POST /campaigns - create a new campaign
-
-campaigns/{ident}
-    GET /campaigns/{ident} - get all information for a campaign
-    PUT /campaigns/{ident} - update all information for a campaign 
-    i'm expecting the "save or approve" call will be this api call with an updated status
-    DELETE /campaigns/{ident} - delete the campaign data (need to build)
-
+users
+    GET /users - get a list of current users based on a filter (like from a trainer)
+    POST /users - create a new user
+    
+users/:id
+    GET /users/:id - get a particular user
+    PUT /users/:id - update a user record
+    DELETE /users/:id - delete the user record
 */
 
-class RestCampaigns extends RestService {
+class RestUsers extends RestService {
     protected $supportedMethods = ['GET', 'POST', 'PUT', 'OPTIONS', 'DELETE'];
-    protected $nounslist = ['campaigns',  'user_id', 'status', 'deal_id'];
+    protected $nounslist = ['users', 'status','trainer'];
 
     /**
      * @param $arguments
@@ -30,14 +26,14 @@ class RestCampaigns extends RestService {
      */
     public function performGet($arguments, $accept) {
         $success = true;
-        if ($arguments['campaigns'] == NULL) {
-            $message = "All Campaigns for User";
-            $projects = SelfServiceApp::getUserProjects($arguments['user_id']);
-            $data = $projects;
+        if ($arguments['users'] == NULL) {
+            $message = "All Users";
+            $users = Users::getAll();
         } else {
-            $projects = SelfServiceApp::getProjectData($arguments['campaigns']);
-            $data = $projects;
+            $message = "Get User $users";
+            $users = Users::apiGet($arguments['users']);
         }
+        $data = $users;
 
         $this->sendResponse($success, $message, $data, $arguments);
 

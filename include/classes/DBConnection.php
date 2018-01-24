@@ -1,9 +1,9 @@
 <?php
 
-namespace FitApp\classes;
+namespace Fitapp\classes;
 
 use ADOConnection;
-// use FitApp\exceptions\Exception;
+// use Fitapp\exceptions\Exception;
 
 /**
  * class DBConnection

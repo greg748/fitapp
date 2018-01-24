@@ -1,9 +1,9 @@
 <?php
-namespace FitApp\classes;
+namespace Fitapp\classes;
 
 use ADOConnection;
 use ADORecordSet;
-use FitApp\exceptions\Exception;
+use Fitapp\exceptions\Exception;
 
 class Table {
     /**
@@ -66,7 +66,7 @@ class Table {
      * @param bool $show_sql
      *
      * @return static
-     * @throws \FitApp\exceptions\Exception
+     * @throws \Fitapp\exceptions\Exception
      */
     public static function create($fields, $show_sql = FALSE) {
         $obj = static::getNewSelf();

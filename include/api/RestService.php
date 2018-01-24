@@ -1,20 +1,16 @@
 <?php
-namespace FitApp\api;
+namespace Fitapp\api;
 
-use FitApp\classes\Logins;
-use FitApp\classes\JsonResponse;
-use FitApp\exceptions\MethodNotAllowedException;
+// use Fitapp\classes\Logins;
+use Fitapp\classes\JsonResponse;
+use Fitapp\exceptions\MethodNotAllowedException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\ExpiredException;
 
 /**
  * class RestService
  *
- * @package FitApp\api
- *
- *
- *         expired: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ0ZXN0dXNlcjEiLCJjb3VudHJ5Q29kZSI6IlVTIiwic2NvcGUiOlsicmVhZDpjYW1wYWlnbiJdLCJpZCI6MSwiZXhwIjoxNTA0ODA1NzQxLCJhdXRob3JpdGllcyI6WyJBZG1pbiIsIkFkanVzdEJvb2tpbmdzIiwiRW5naW5lZXJpbmdBcHByb3ZhbCJdLCJqdGkiOiJjM2JlYmEzMS03YzNiLTQ4NzEtYmFhYS02NWQ2MmNjZWEyNzEiLCJjbGllbnRfaWQiOiJwdWxzZSJ9.k-Mn_4mXhVDv-ouTQ3fCuPYejidefAyd3Dcjo7bh4Q0
- *         longer : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ0ZXN0dXNlcjEiLCJjb3VudHJ5Q29kZSI6IlVTIiwic2NvcGUiOlsicmVhZDpjYW1wYWlnbiJdLCJpZCI6MSwiZXhwIjoxNTA2MDE3MDY4LCJhdXRob3JpdGllcyI6WyJBZG1pbiIsIkFkanVzdEJvb2tpbmdzIiwiRW5naW5lZXJpbmdBcHByb3ZhbCJdLCJqdGkiOiJiODQ1MjM5OS04ZDUwLTRhMGQtOTc4Mi0xYmQ1ZDQzMmQ1NDEiLCJjbGllbnRfaWQiOiJwdWxzZSJ9.SAAuncWpqGiYye3BdZQhUbjQpfEPSsyaPG7fXT5fOG4
+ * @package Fitapp\api
  *
  */
 class RestService {
@@ -22,6 +18,26 @@ class RestService {
     protected $nounslist;
     protected $method;
     protected $envelope;
+
+    private $secretKey = 'poiu6ytr2ewqa75sdfghjkl4mnb9vcxz'; //@todo config this?
+
+    // jwt eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJmaXRhcHAubW9iaSIsImlhdCI6MTUxNjgxNTY2OSwiZXhwIjoxNTQ4MzUxNjY5LCJhdWQiOiJmaXRhcHAubW9iaSIsInN1YiI6ImdyZWdAZ3JlZ2Jvd25lLmNvbSIsIk5hbWUiOiJHcmVnIiwiU3VybmFtZSI6IkJvd25lIiwiRW1haWwiOiJncmVnQGdyZWdib3duZS5jb20iLCJSb2xlIjpbIlVzZXIiLCJBZG1pbiJdLCJ1c2VyIjoiMSJ9.pNC1qu1KW4BodSlPEp8r1ExvO3b3YvnIwuP5BoMzEEw 
+    /*
+{
+    "iss": "fitapp.mobi",
+    "iat": 1516815669,
+    "exp": 1548351669,
+    "aud": "fitapp.mobi",
+    "sub": "greg@gregbowne.com",
+    "Name": "Greg",
+    "Surname": "Bowne",
+    "Email": "greg@gregbowne.com",
+    "Role": [
+        "User",
+        "Admin"
+    ],
+    "user": "1"
+}*/
 
     /**
      *
@@ -61,7 +77,7 @@ class RestService {
 
     /**
      */
-    public function handleRawRequest() {
+    public function doRest() {
         list($server, $get, $post) = [$_SERVER, $_GET, $_POST];
 
         $this->method= ($server['REQUEST_METHOD']) ?: $_SERVER['REQUEST_METHOD'];
@@ -223,6 +239,7 @@ class RestService {
      * @param unknown $arguments
      */
     protected function userTokenRequired($arguments) {
+        return true; // @todo @debug removing requirement to test gets
         $data['header'] = 'HTTP/1.1 401 Unauthorized';
         $message = $this->method ." Called. User Token Not supplied or Expired. Please Login";
         $this->sendResponse(FALSE, $message, $data, $arguments);
@@ -264,6 +281,7 @@ class RestService {
         if ($success && !isset($arguments['debug'])) {
             unset($jsonResponse['debug']);
         }
+        echo header('Content-type: application/json; charset=utf-8');
         echo new JsonResponse($jsonResponse);
         exit();
 

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Handles instances of a workout, also called a session on the front end
+ */
+
 namespace Fitapp\classes;
 class WorkoutInstances extends Table {
 

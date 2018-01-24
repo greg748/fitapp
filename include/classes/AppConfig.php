@@ -5,9 +5,9 @@
  *   Date: 4/29/15
  */
 
-namespace FitApp\classes;
+namespace Fitapp\classes;
 
-use FitApp\exceptions\Exception;
+use Fitapp\exceptions\Exception;
 
 /**
  * class AppConfig
