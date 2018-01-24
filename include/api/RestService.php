@@ -15,7 +15,7 @@ use Firebase\JWT\ExpiredException;
  */
 class RestService {
     protected $supportedMethods = [];
-    protected $nounslist;
+    protected $nounsList;
     protected $method;
     protected $envelope;
 
@@ -57,7 +57,7 @@ class RestService {
      */
     public function getJWT() {
         $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
-        $secretKey = 'secretkey'; //@todo put into config?
+        $secretKey = $this->secretKey; //@todo put into config?
         $token = FALSE;
         if ($authHeader) {
             list($jwt) = sscanf($authHeader, 'Bearer %s');
@@ -139,7 +139,7 @@ class RestService {
                 $request = explode('/', trim($request_uri, '/'));
                 while (count($request) > 0) {
                     $var = array_shift($request);
-                    if (count($request) > 0 && in_array($var, $this->nounslist) && !in_array($request[0], $this->nounslist)) {
+                    if (count($request) > 0 && in_array($var, $this->nounsList) && !in_array($request[0], $this->nounsList)) {
                         $val = array_shift($request);
                         $arguments[$var] = urldecode($val);
                     } elseif (substr($var, 0, 1) == '?') {
@@ -169,7 +169,7 @@ class RestService {
                 }
                 while (count($request) > 0) {
                     $var = array_shift($request);
-                    if (count($request) > 0 && in_array($var, $this->nounslist) && !in_array($request[0], $this->nounslist)) {
+                    if (count($request) > 0 && in_array($var, $this->nounsList) && !in_array($request[0], $this->nounsList)) {
                         $val = array_shift($request);
                         if (strpos(',', $val) > 0) {
                             $val = explode(',', $val);
@@ -237,9 +237,10 @@ class RestService {
     /**
      * Sends the 401 Unauthorized header
      * @param unknown $arguments
+     * @return void
      */
     protected function userTokenRequired($arguments) {
-        return true; // @todo @debug removing requirement to test gets
+        //return true; // @todo @debug removing requirement to test gets
         $data['header'] = 'HTTP/1.1 401 Unauthorized';
         $message = $this->method ." Called. User Token Not supplied or Expired. Please Login";
         $this->sendResponse(FALSE, $message, $data, $arguments);
@@ -273,13 +274,17 @@ class RestService {
         if ($this->method == 'POST' || $this->method == 'OPTIONS') {
             unset($arguments);
         }
-        $jsonResponse = ['status'=>$success ? 'success' : 'failure',
-            'success'=>$success,
-            'message'=>$message,
-            'data'=>$data,
-            'debug'=>$arguments];
-        if ($success && !isset($arguments['debug'])) {
-            unset($jsonResponse['debug']);
+        if ($success) {
+            $jsonResponse = $data;
+        } else {
+            $jsonResponse = ['status'=>$success ? 'success' : 'failure',
+                'success'=>$success,
+                'message'=>$message,
+                'data'=>$data,
+                'debug'=>$arguments];
+            if ($success && !isset($arguments['debug'])) {
+                unset($jsonResponse['debug']);
+            }
         }
         echo header('Content-type: application/json; charset=utf-8');
         echo new JsonResponse($jsonResponse);

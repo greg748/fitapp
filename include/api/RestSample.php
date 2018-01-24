@@ -22,7 +22,7 @@ campaigns/{ident}
 
 class RestCampaigns extends RestService {
     protected $supportedMethods = ['GET', 'POST', 'PUT', 'OPTIONS', 'DELETE'];
-    protected $nounslist = ['campaigns',  'user_id', 'status', 'deal_id'];
+    protected $nounsList = ['campaigns',  'user_id', 'status', 'deal_id'];
 
     /**
      * @param $arguments

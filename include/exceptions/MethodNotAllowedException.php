@@ -1,4 +1,5 @@
 <?php
+namespace Fitapp\exceptions;
 
 class MethodNotAlowedException extends Exception {
     public function __construct($message = null, $code = 0) {

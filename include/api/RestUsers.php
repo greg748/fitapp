@@ -18,7 +18,7 @@ users/:id
 
 class RestUsers extends RestService {
     protected $supportedMethods = ['GET', 'POST', 'PUT', 'OPTIONS', 'DELETE'];
-    protected $nounslist = ['users', 'status','trainer'];
+    protected $nounsList = ['users', 'status','trainer'];
 
     /**
      * @param $arguments
