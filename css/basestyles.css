@@ -110,9 +110,9 @@ div.exercise .secondaryMuscles {
 div.exercise .equipment {
     width: 100px;
 }
-
+div.currentGroup { border: 1px dashed #999;}
 div.scoreTable { display: inline-block; width: 350px; vertical-align: top; border: 1px solid #ccc}
 div.scoreDiagram { display: inline-block; width: 400px; border: 1px solid #ccc;}
-div.scoreMuscle { clear: left; display: inline-block; width: 125px; }
+div.scoreMuscle { clear: left; display: inline-block; width: 150px; }
 div.scorePrimary, div.scoreSecondary, div.scoreColor { display: inline-block; width: 75px} 
 div.header { font-weight: bold; }

@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $workout_id = ($Workout) ? $Workout->getField('id') : NULL;
         $nextExerciseOrdinal = $Group->getNextExerciseOrdinal();
         $nickname_used = ($_REQUEST['nickname_used']) ?: NULL;
-        $rep_pattern = ($_REQUEST['rep_pattern']) ?: [12,10,8];
+        $rep_pattern = ($_REQUEST['rep_pattern']) ?: "'{}'";
         $exercise_item = [
             'exercise_id'=>$id,
             'workout_id' => $workout_id,
@@ -112,7 +112,7 @@ if ($Group) {
 } 
 
 $gripsMenu = menu(Exercises::$gripTypes, 'grip', $e['grip'], TRUE);
-$abiltitiesMenu = menu(Exercises::$abilities, 'ability_level', $e['ability_level'],FALSE);
+$abilitiesMenu = menu(Exercises::$abilities, 'ability_level', $e['ability_level'],FALSE);
 $userPositionsMenu = menu(Exercises::$userPositions, 'user_position', $e['user_position'], FALSE);
 
 $muscles = Muscles::getMusclesForMenu();
@@ -129,21 +129,40 @@ $classifiersMenu = menu(ExerciseClassifiers::getMenu(), 'classifier', $e['classi
 if ($Workout) {
     $exercisesMenu = menu(Exercises::getExercisesMenu(['workout_type'=>$w['workout_type']]),'id','', TRUE, FALSE);
 }
-$groupTypesMenu = menu(ExerciseGroups::$exercise_group_types, 'group_type', $g['group_type'], FALSE, TRUE, FALSE);
 
 Template::startPage("Edit Exercise");
-if ($Workout) { 
+if ($Workout) {
     $exercises = $Workout->getExercises();
+    if (count($exercises) > 0) {
+        echo "<p><a href=\"/admin/workouts/one.php?id={$w['id']}\">View Score</a></p>";
+    }
     $group_id = '';
+    $group_types = [];
+    $nextGroupType = 'warmup';
+    $activeGroupName = 'warmup';
     foreach ($exercises as $ex) {
         if ($ex['exercise_group_id'] != $group_id) {
+            $group_id = $ex['exercise_group_id'];
+            $group_class = ($g['id'] == $group_id) ? 'currentGroup' : '';
+            $group_types[$ex['group_type']]++;
+            if ($ex['group_type'] == 'warmup') {
+                $nextGroupType = 'main';
+            } elseif ($ex['group_type'] == 'main') {
+                $nextGroupType = 'main';
+                $ex['group_type'] .= '-'.$group_types['main'];
+            }
+            if ($g['id'] == $group_id) {
+                $activeGroupName = $ex['group_type'];
+            }
+            echo "<div id=\"group_{$group_id}\" class=\"$group_class\">";
             echo "<h3>{$ex['group_type']} ({$ex['exercise_group_id']})";
             echo "<a href=\"/admin/exercises/edit.php?group_id={$ex['exercise_group_id']}\">Add to this group</a>";
             echo "<a href=\"/admin/groups/edit.php?id={$ex['exercise_group_id']}\">Edit Group</a></h3>";
-            $group_id = $ex['exercise_group_id'];
+            echo "</div>";
         }
         Exercises::display($ex);
     }
+    $groupTypesMenu = menu(ExerciseGroups::$exercise_group_types, 'group_type', $nextGroupType, FALSE, TRUE, FALSE);
 ?>
 <form method="post" action="edit.php">
 <input type="hidden" name="existing" value="true"/>
@@ -151,7 +170,7 @@ if ($Workout) {
 <input type="hidden" name="workout_id" value="<?=$w['id']?>"/>
 <?=$exercisesMenu;?>
 <?php if ($Group) { ?>
-  <button name="addToGroup">Add to Group</button>
+  <button name="addToGroup">Add to Group <?=$activeGroupName?></button>
 <?php } ?>
 <button name="addToNewGroup">Add to New Group</button><?=$groupTypesMenu;?>
 </form>
@@ -172,7 +191,7 @@ if ($Workout) {
 <tr>
     <td><input type="text" name="name" value="<?=$e['name'];?>"></td>
     <td><?= $workoutTypesMenu; ?></td>
-    <td><?= $abiltitiesMenu; ?></td>
+    <td><?= $abilitiesMenu; ?></td>
     <td><?= $primaryMuscles;?></td>
     <td><?= $secondaryMuscles;?></td>
     <td><textarea name="notes" id="notes" rows="3" cols="25"><?=$e['notes'];?></textarea></td>
@@ -202,7 +221,7 @@ if ($Workout) {
 <?php //@todo add rep pattern
 
 if ($Group) { ?>
-  <button name="saveToGroup">Save to Group</button>
+  <button name="saveToGroup">Save to Group <?=$activeGroupName?></button>
 <?php } ?>
 <button name="saveNewGroup">Save to New Group</button><?=$groupTypesMenu;?>
 </form>

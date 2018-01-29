@@ -2,27 +2,30 @@
 namespace Fitapp\classes;
 class Sets extends Table {
 
-    public static $set_types = ['bilateral'=>'bilateral','single'=>'single','alt'=>'alt',
-        'alt-high'=>'alt-high','alt-low'=>'alt-low','time'=>'time'];
-    public static $units = [''=>'--','lbs'=>'lbs','kg'=>'kg'];
-    function __construct() {
+    public static $set_types = ['bilateral' => 'bilateral', 'single' => 'single', 'alt' => 'alt',
+        'alt-high' => 'alt-high', 'alt-low' => 'alt-low', 'position-1' => 'position-1',
+        'position-2' => 'position-3', 'position-3' => 'position-3', 'time' => 'time'];
+    public static $units = ['' => '--', 'lbs' => 'lbs', 'kg' => 'kg'];
+
+    function __construct()
+    {
         $this->table_name = 'exercise_sets';
         $this->table_prefix = '';
         $this->fields = [
             'id' => 0,
             'workout_instance_id' => 0,
-            'group_id'=>0,
-            'exercise_id'=>0,
-            'set_order'=>0,
-            'set_type' => '', // 'bilateral','single','alt','alt-high','alt-low'
+            'group_id' => 0,
+            'exercise_id' => 0,
+            'set_order' => 0,
+            'set_type' => '', // 'bilateral','single','alt'... above
             'weight' => NULL,
             'units' => 'lbs', // lbs/kg
-            'reps' => 0, 
-            'created'=>NULL,
-            'lastmodified'=>NULL,
+            'reps' => 0,
+            'created' => NULL,
+            'lastmodified' => NULL,
         ];
-        $this->no_insert = ['id','created','lastmodified'];
-        $this->no_save = ['created','lastmodified'];
+        $this->no_insert = ['id', 'created', 'lastmodified'];
+        $this->no_save = ['created', 'lastmodified'];
         parent::__construct();
 
         $this->pkey = 'id';

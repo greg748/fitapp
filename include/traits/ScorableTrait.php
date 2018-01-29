@@ -37,7 +37,11 @@ trait ScorableTrait {
             $workout_id_list = $id;
         }
 
-        $sql = "SELECT muscle_name, e.ability_level, SUM(primary_score) AS primary_score, SUM(secondary_score) as secondary_score
+        // @todo give more score to single/alt exercises
+        // @todo give more score to bosu/physio exercises... but they may already be higher level
+        $sql = "SELECT muscle_name, e.ability_level, 
+            SUM(primary_score) AS primary_score, 
+            SUM(secondary_score) as secondary_score
             FROM exercise_muscles em
             JOIN workout_exercises we ON we.exercise_id=em.exercise_id
             JOIN exercises e on e.id=we.exercise_id
@@ -82,7 +86,7 @@ trait ScorableTrait {
             $s['total_score'] = $s['primary_score'] + $s['secondary_score'];
             $s['css'] = 'ffffff';
             $s['group_name'] = str_replace(' ','-',ucWords($s['muscle_name']));
-            if ($s['total_score'] >= 0) { 
+            if ($s['total_score'] > 0) {
                 $secondary_segment = min($secondary_segments-1, ceil($s['secondary_score']*10));
                 $primary_segment = min($primary_segments-1, ceil($s['primary_score']));
                 if ($s['primary_score'] == 0) {
@@ -95,7 +99,7 @@ trait ScorableTrait {
                 $scoreTable .= "<div class=\"scoreMuscle\">".ucWords($s['muscle_name'])."</div>";
                 $scoreTable .= "<div class=\"scorePrimary\">".$s['primary_score']."</div>";
                 $scoreTable .= "<div class=\"scoreSecondary\">".$s['secondary_score']."</div>";
-                // $scoreTable .= "<div class=\"scoreColor\">".$s['css']."</div>";
+                //$scoreTable .= "<div class=\"scoreColor\">".$s['css']."</div>";
                 $scoreTable .= "\n";
                 $primaryTotal += $s['primary_score'];
             }

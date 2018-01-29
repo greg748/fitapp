@@ -32,13 +32,15 @@ class Workouts extends Table {
      *
      * @param array $filters
      * @param String $sort
-     * @return ADORecordSet 
+     * @return mixed
      */
     public static function getAllWorkouts($filters = [], $sort = NULL) {
         $Workout = static::getNewSelf();
         $table_prefix = $Workout->table_prefix;
+        $filter_text = '';
         if (count($filters)) {
             // filter the workouts
+            $filter_text = "WHERE ". implode(' AND ',$filters);
         }
         $order = ($sort)?? 'create_date DESC';
         $sql = "SELECT w.*, 
@@ -49,9 +51,14 @@ class Workouts extends Table {
             JOIN {$table_prefix}workout_types wt on wt.id=w.workout_type
             LEFT JOIN {$table_prefix}users u on u.id=w.user_id
             LEFT JOIN {$table_prefix}users c on c.id=w.created_by
+            {$filter_text}
             ORDER BY $order";
         $results = $Workout->db->Execute($sql);
         return $results;
+    }
+
+    public static function getUserWorkouts($user_id = 0) {
+        return static::getAllWorkouts(["u.id=$user_id"]);
     }
 
     /**
@@ -73,7 +80,7 @@ class Workouts extends Table {
         $sql = "SELECT eg.group_order as exercise_group_order, eg.group_type, 
             we.exercise_id, we.exercise_order, eg.id as exercise_group_id,
             we.id as workout_exercise_id, 
-            coalesce(we.nickname_used, e.name) as exercise_name, e.primary_musc, ei.primary_muscle_name,
+            COALESCE(we.nickname_used, e.name) as exercise_name, e.primary_musc, ei.primary_muscle_name,
             e.secondary_muscs,  ei.secondary_muscle_names,
             e.description, e.ability_level, e.grip, e.user_position, ei.equipment, ei.weight_type
             FROM workout_exercises we
@@ -105,12 +112,11 @@ class Workouts extends Table {
                 CASCADE";
             $result = $this->db->Execute($sql);
             if ($result) {
-                $workout_id = $this->getField('id');
                 $sql = "UPDATE exercise_groups 
                     SET group_order = group_order-1
                     WHERE workout_id=$group_id  
                     AND group_order > $group_order";
-                $updates = $this->db->Execute($sql);
+                return $this->db->Execute($sql);
             }
         }
         return $result;

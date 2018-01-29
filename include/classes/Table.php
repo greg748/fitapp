@@ -23,6 +23,7 @@ class Table {
     protected $problem_fields;
     protected $null_fields = [];
     protected $array_fields = [];
+    protected $json_fields = [];
     
     //Table Fields
     protected $fields = [];
@@ -122,7 +123,9 @@ class Table {
                 $queryValues[] = "NULL";
             } else {
                 if (in_array($name, $this->array_fields)) {
-                    $queryValues[] = "'{".implode(',',array_map([$this,"sqlArrayQuote"],array_filter($value)))."}'";
+                    $queryValues[] = "'{" . implode(',', array_map([$this, "sqlArrayQuote"], array_filter($value))) . "}'";
+                } elseif (in_array($name, $this->json_fields)) {
+                    $queryValues[] = ($value) ?: "'{}'";
                 } else {
                     if (!is_numeric($value) && strlen($value) > 0) {
                         $value = trim($value);

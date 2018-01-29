@@ -5,9 +5,10 @@ use Fitapp\classes\AppConfig;
 class Exercises extends Table {
 
     public static $userPositions = ['standing','bench','kneeling','half-kneeling','seated','incline bench', 'lying', 'lying knees at 90', 'lying legs at 45',
-        'side lying', 'decline bench','physio head and shoulders','physio chest','squatted','stagger stance','lunge','prone','plank','high plank','side plank','high side plank','roman chair','back extension'];
+        'side lying', 'decline bench','physio head and shoulders','physio chest','squatted','stagger stance','lunge','prone','plank','high plank','side plank',
+        'high side plank','roman chair','back extension','inverse row','wall sit','bent pushing','bent single leg'];
     public static $gripTypes = ['neutral','palm-in','palm-up','thumb-up','thumb-down', 'thumb-up-and-in','reverse','wide','narrow',
-        'hammer','foot','med-ball','multi', 'v-grip'];
+        'hammer','foot','med-ball','multi', 'v-grip','diamond','zercher'];
     public static $abilities = [1=>'beginner',2=>'basic',3=>'moderate',4=>'advanced',5=>'expert'];
     public static $abilityMultipliers = [1=>1, 2=>1, 3=>1.5, 4=>1.75, 5=>2];
 
@@ -39,6 +40,7 @@ class Exercises extends Table {
       'stored_json' => NULL, // will be used to store a cached version of the exercise
     ];
     $this->array_fields = ['secondary_muscs','equipment','workout_type','weight_type','nicknames'];
+    $this->json_fields = ['stored_json'];
     $this->no_insert = ['id', 'created','lastmodified'];
     $this->no_save = ['created','lastmodified'];
     parent::__construct();
@@ -72,15 +74,16 @@ DISP;
   public static function getExercisesMenu($filters = NULL) {
     $Exercises = static::getNewSelf();
     $filters = $Exercises->filterExercises($filters);
-    $sql = "SELECT id, name FROM exercises
+    $sql = "SELECT ec.name as classifier, e.id, e.name FROM exercises e
+        JOIN exercise_classifiers ec ON ec.id=e.classifier
         WHERE true
-        {$filters}";
+        {$filters}
+        ORDER BY 1,3";
     $results = $Exercises->db->Execute($sql);
     echo $Exercises->db->errorMsg();
-    print_pre($sql);
     $exercises = [];
     foreach ($results as $r) {
-        $exercises[$r['id']]= $r['name'];
+        $exercises[$r['classifier']][$r['id']]= $r['name'];
     }
     return $exercises;
   }

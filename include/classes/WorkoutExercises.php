@@ -13,11 +13,11 @@ class WorkoutExercises extends Table {
           'exercise_group_id' => 0,
           'exercise_order' => 1,
           'nickname_used' => NULL,
-          'rep_pattern'=> [12,10,8],
+          'rep_pattern'=> '{}', // this is now json
         ];
         $this->no_insert = ['id'];
         $this->null_fields = ['nickname_used'];
-        $this->array_fields = ['rep_pattern'];
+        $this->json_fields = ['rep_pattern'];
         $this->no_save = [];
         parent::__construct();
     }

@@ -6,7 +6,7 @@ use Fitapp\classes\RegimenWorkouts;
 
 global $rw_id;
 $id = $_REQUEST['id'];
-if (isset($_REQUEST['rw_id'])) {
+if (isset($_REQUEST['rw_id']) && $_REQUEST['rw_id'] > 0) {
     $rw_id = $_REQUEST['rw_id'];
     $RWO = RegimenWorkouts::get($rw_id);
 }
