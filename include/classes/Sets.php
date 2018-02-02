@@ -4,7 +4,7 @@ class Sets extends Table {
 
     public static $set_types = ['bilateral' => 'bilateral', 'single' => 'single', 'alt' => 'alt',
         'alt-high' => 'alt-high', 'alt-low' => 'alt-low', 'position-1' => 'position-1',
-        'position-2' => 'position-3', 'position-3' => 'position-3', 'time' => 'time'];
+        'position-2' => 'position-2', 'position-3' => 'position-3', 'time' => 'time'];
     public static $units = ['' => '--', 'lbs' => 'lbs', 'kg' => 'kg'];
 
     function __construct()
@@ -20,7 +20,7 @@ class Sets extends Table {
             'set_type' => '', // 'bilateral','single','alt'... above
             'weight' => NULL,
             'units' => 'lbs', // lbs/kg
-            'reps' => 0,
+            'reps' => 0, // @todo how to store time?
             'created' => NULL,
             'lastmodified' => NULL,
         ];
@@ -37,6 +37,7 @@ class Sets extends Table {
      * @param mixed $data
      * @param boolean $showSql
      * @return boolean Saved or not
+     * @throws null
      */
     public static function saveSet($data = [], $showSql = FALSE) {
         $data['set_type'] = $data['type'];

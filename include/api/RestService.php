@@ -90,7 +90,7 @@ class RestService {
             // duplicate as below
             $this->envelope = 'jwt';
             if (!$token) {
-                $this->userTokenRequired($arguments);
+                //$this->userTokenRequired($arguments);
             }
             $header['user_id'] = $token['id'];
             $header['user_permissions'] = $token['authorities'];
@@ -262,7 +262,7 @@ class RestService {
      * @param $data
      * @param $arguments
      */
-    protected function sendResponse($success, $message, $data, $arguments) {
+    protected function sendResponse($success, $message, $data, $arguments = []) {
         if ($success) {
             $this->successHeader($data['header']);
         } else {

@@ -1,5 +1,2 @@
-# fitapp
-Workout creation app
-
-By: Greg Bowne
-Website at fitapp.mobi
+# fitapp-front
+React front end for the fitness app

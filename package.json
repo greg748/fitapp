@@ -1,0 +1,29 @@
+{
+  "name": "fitapp-mobi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Greg Bowne",
+  "license": "MIT",
+  "scripts": {
+    "serve": "live-server wworkouts/",
+    "build": "webpack --watch",
+    "dev-server": "webpack-dev-server"
+  },
+  "dependencies": {
+    "babel-cli": "6.24.1",
+    "babel-core": "6.25.0",
+    "babel-loader": "7.1.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "1.5.2",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.14.0",
+    "live-server": "^1.2.0",
+    "react": "16.0.0",
+    "react-dom": "16.0.0",
+    "underscore": "^1.8.3",
+    "validator": "8.0.0",
+    "webpack": "3.1.0",
+    "webpack-dev-server": "2.5.1"
+  },
+  "repository": "https://github.com/greg748/fitapp.git"
+}

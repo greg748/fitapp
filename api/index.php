@@ -2,6 +2,7 @@
 
 include_once '../init.php';
 use Fitapp\api\RestUsers;
+use Fitapp\api\RestSets;
 
 $api_request = $_SERVER['REQUEST_URI'];
 $headers = getallheaders();
@@ -20,6 +21,8 @@ list($resource,$others) = explode('/',ltrim($api_request,'/'));
 switch ($resource) {
     case 'users' : $restObject = new RestUsers();
     break;
+
+    case 'sets' : $restObject = new RestSets();
 
     case 'workouts' :
     break;
